@@ -1,0 +1,84 @@
+
+.pd{
+  color:var(--c-ink);padding:24px 0 96px
+}
+.pd *{box-sizing:border-box}
+.pd .breadcrumb{font-size:.85rem;margin-bottom:20px}
+.pd .breadcrumb a{color:var(--c-mute);text-decoration:none}
+.pd .breadcrumb a:hover{color:var(--c-main-d)}
+.pd .card-box{background:#fff;border-radius:18px;box-shadow:0 2px 14px rgba(0,0,0,.05);padding:24px}
+
+/* گالری */
+.pd-main-img{position:relative;background:var(--c-bg);border-radius:14px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in}
+.pd-main-img img{max-width:82%;max-height:82%;object-fit:contain;transition:transform .35s ease,opacity .2s}
+.pd-main-img.zoom img{transform:scale(1.7)}
+.pd-badge{position:absolute;top:14px;right:14px;background:var(--c-green);color:#fff;font-size:.75rem;padding:3px 10px;border-radius:6px;z-index:2}
+.pd-fav{position:absolute;top:12px;left:12px;width:42px;height:42px;border-radius:50%;border:1px solid var(--c-line);background:#fff;display:grid;place-items:center;font-size:1.15rem;z-index:2;transition:.2s}
+.pd-fav:hover{border-color:var(--c-main)}
+.pd-fav.on{background:#ffefef;border-color:#ffc9c9;color:#e5383b}
+.pd-thumbs{display:flex;gap:10px;margin-top:12px}
+.pd-thumbs button{width:76px;height:76px;padding:6px;border:2px solid transparent;border-radius:12px;background:var(--c-bg);transition:.2s}
+.pd-thumbs button img{width:100%;height:100%;object-fit:contain}
+.pd-thumbs button.active{border-color:var(--c-main)}
+
+/* اطلاعات */
+.pd-title{font-size:1.6rem;font-weight:800;margin:0 0 10px;line-height:1.5}
+.pd-meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:.85rem;color:var(--c-mute)}
+.pd-stars{color:var(--c-main);letter-spacing:2px}
+.pd-stock{color:#2e8b3d;background:#eaf6ec;padding:2px 10px;border-radius:20px;font-size:.8rem}
+.pd-stock.low{color:#b45309;background:#fff1dc}
+.pd-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 12px;margin:20px 0 6px}
+.pd-price .now{font-size:2rem;font-weight:800}
+.pd-price .unit{font-size:1rem;font-weight:500}
+.pd-price .old{color:#e5383b;text-decoration:line-through;font-size:1rem}
+.pd-price .off{background:#e5383b;color:#fff;font-size:.8rem;padding:2px 8px;border-radius:6px}
+.pd-desc{color:#555;line-height:2;margin:14px 0 18px;font-size:.95rem}
+.pd-features{list-style:none;padding:0;margin:0 0 22px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pd-features li{background:var(--c-soft);border-radius:12px;padding:10px 12px;font-size:.85rem;display:flex;gap:8px;align-items:center}
+.pd-features i{color:var(--c-main-d);font-size:1.1rem}
+
+/* خرید */
+.pd-total{width:100%;font-size:.85rem;color:var(--c-mute)}
+.pd-total b{color:var(--c-ink)}
+.pd-trust{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:18px;font-size:.82rem;color:var(--c-mute)}
+.pd-trust i{color:var(--c-main-d);margin-left:4px}
+
+/* تب‌ها */
+.pd .nav-tabs{border-bottom:1px solid var(--c-line);gap:6px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden}
+.pd .nav-tabs .nav-link{border:0;border-bottom:3px solid transparent;color:var(--c-mute);font-weight:600;white-space:nowrap;padding:12px 16px}
+.pd .nav-tabs .nav-link.active{color:var(--c-ink);border-bottom-color:var(--c-main);background:transparent}
+.pd .tab-pane{padding-top:22px;line-height:2;color:#555}
+.pd-spec{width:100%;max-width:640px}
+.pd-spec tr:nth-child(odd){background:var(--c-bg)}
+.pd-spec td{padding:10px 14px;font-size:.92rem}
+.pd-spec td:first-child{color:var(--c-mute);width:38%;border-radius:0 8px 8px 0}
+.pd-review{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--c-line)}
+.pd-avatar{width:42px;height:42px;border-radius:50%;background:var(--c-soft);color:var(--c-main-d);display:grid;place-items:center;font-weight:700;flex:none}
+
+/* محصولات مرتبط */
+.pd-sec-title{font-size:1.2rem;font-weight:800;margin:36px 0 16px}
+.rp{background:#fff;border-radius:16px;box-shadow:0 2px 14px rgba(0,0,0,.05);padding:12px;height:100%;display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.rp .im{background:var(--c-bg);border-radius:12px;aspect-ratio:1/1;display:grid;place-items:center;margin-bottom:10px}
+.rp .im img{max-width:75%;max-height:75%}
+.rp h3{font-size:.95rem;font-weight:700;margin:0 0 4px}
+.rp .p{font-weight:800;margin-top:auto}
+.rp:hover h3{color:var(--c-main-d)}
+
+/* نوار خرید موبایل */
+.pd-sticky{display:none}
+@media (max-width:767.98px){
+    .pd{padding-bottom:110px}
+    .pd .card-box{padding:16px;border-radius:14px}
+    .pd-title{font-size:1.25rem}
+    .pd-price .now{font-size:1.6rem}
+    .pd-buy{display:none}
+    .pd-sticky{display:flex;position:fixed;inset:auto 0 0 0;z-index:1030;background:#fff;box-shadow:0 -4px 20px rgba(0,0,0,.1);padding:10px 14px;gap:10px;align-items:center}
+    .pd-sticky .pr{font-weight:800;line-height:1.3;white-space:nowrap}
+    .pd-sticky .pr small{display:block;font-weight:400;color:var(--c-mute);font-size:.7rem}
+    .pd-sticky .btn-cart{height:46px}
+    .pd-thumbs button{width:62px;height:62px}
+}
+.pd button:focus-visible,.pd a:focus-visible{outline:3px solid rgba(245,163,15,.5);outline-offset:2px}
+.pd-toast{position:fixed;top:20px;left:50%;transform:translate(-50%,-90px);background:#1c1c1c;color:#fff;padding:12px 20px;border-radius:12px;font-size:.9rem;z-index:2000;transition:transform .3s}
+.pd-toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.pd *,.pd-toast{transition:none!important}}

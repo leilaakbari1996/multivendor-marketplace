@@ -1,0 +1,20 @@
+.pd-qty{display:flex;align-items:center;border:1px solid #e3e3e3;border-radius:12px;overflow:hidden;height:52px}
+.pd-qty button{width:46px;height:100%;border:0;background:#fff;font-size:1.2rem;transition:.15s}
+.pd-qty button:hover:not(:disabled){background:var(--c-soft)}
+.pd-qty button:disabled{opacity:.35}
+.pd-qty input{width:48px;text-align:center;border:0;font-weight:700;outline:0;background:transparent}
+
+.btn-cart{flex:1;height:52px;border:0;border-radius:12px;background:var(--c-main);color:#fff;font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn-cart:hover{background:var(--c-main-d)}
+.btn-cart.done{background:#2e8b3d}
+.btn-cart:disabled{background:#ccc}
+
+.pd-buy{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--c-line)}
+
+.pd-card .btn-cart.add-cart{
+    background:var(--c-main);
+    color:#fff;
+    flex:1;
+    min-width:0;   /* min-width:180px قبلی در کارت کوچک جا نمی‌شود */
+    height:44px;
+}

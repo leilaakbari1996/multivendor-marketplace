@@ -1,0 +1,31 @@
+.btn-wishlist.active {
+    color: #dc3545;
+}
+
+.text-danger
+{
+    color: #dc3545 !important;
+}
+
+.cart-checkout-btn {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-hover-opacity: .9;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+
+.cart-checkout-btn:hover {
+    opacity: var(--bs-btn-hover-opacity);
+}
+
+a,
+a:hover,
+a:focus{
+    text-decoration:none !important;
+}

@@ -1,0 +1,6 @@
+.breadcrumb{font-size:.88rem;margin-bottom:20px;padding:0;display:flex;flex-wrap:wrap;align-items:center;list-style:none}
+.breadcrumb .breadcrumb-item{display:flex;align-items:center;padding:0}
+.breadcrumb .breadcrumb-item+.breadcrumb-item::before{content:"/"!important;float:none;display:inline-block;padding:0 10px;color:#c4c4c4}
+.breadcrumb a{color:var(--c-mute);text-decoration:none}
+.breadcrumb a:hover{color:var(--c-main-d)}
+.breadcrumb .active{color:var(--c-ink);font-weight:600}

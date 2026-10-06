@@ -1,0 +1,62 @@
+
+.ad{
+    color:var(--c-ink)}
+.ad *{box-sizing:border-box}
+.ad-card{background:#fff;border-radius:18px;box-shadow:0 2px 14px rgba(0,0,0,.05);padding:24px;border:1px solid var(--c-line)}
+.ad-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.ad-head h2{font-size:1.15rem;font-weight:800;margin:0}
+.ad-head small{color:var(--c-mute);margin-right:8px;font-weight:400}
+.ad-btn{border:0;border-radius:12px;background:var(--c-main);color:#fff;font-weight:700;font-size:.9rem;height:44px;padding:0 18px;display:inline-flex;align-items:center;gap:8px;transition:.2s}
+.ad-btn:hover{background:var(--c-main-d)}
+.ad-btn.ghost{background:var(--c-bg);color:var(--c-ink)}
+.ad-btn.ghost:hover{background:#ececec}
+.ad-btn.danger{background:var(--c-red)}
+.ad-btn:disabled{opacity:.6}
+
+.ad-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.ad-item{border:1.5px solid var(--c-line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:.2s;background:#fff}
+.ad-item:hover{border-color:#e0e0e0}
+.ad-item.def{border-color:var(--c-main);background:var(--c-soft)}
+.ad-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ad-top b{font-size:1rem;display:flex;align-items:center;gap:8px}
+.ad-top b i{color:var(--c-main-d)}
+.ad-tag{background:var(--c-main);color:#fff;font-size:.72rem;padding:2px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
+.ad-text{font-size:.88rem;line-height:2;color:#444;margin:0}
+.ad-meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.82rem;color:var(--c-mute)}
+.ad-meta i{margin-left:5px}
+.ad-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:10px;border-top:1px dashed #ddd}
+.ad-act button{border:0;background:transparent;font-size:.82rem;color:var(--c-mute);padding:6px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+.ad-act button:hover{background:rgba(0,0,0,.05);color:var(--c-ink)}
+.ad-act .del:hover{background:#ffefef;color:var(--c-red)}
+.ad-act .mk{margin-right:auto;color:var(--c-main-d);font-weight:600}
+.ad-add{border:2px dashed #ddd;border-radius:16px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;color:var(--c-mute);transition:.2s}
+.ad-add:hover{border-color:var(--c-main);color:var(--c-main-d);background:var(--c-soft)}
+.ad-add i{font-size:1.6rem}
+.ad-empty{text-align:center;padding:40px 10px}
+.ad-empty i{font-size:3rem;color:#ddd}
+.ad-empty p{color:var(--c-mute);margin:10px 0 18px}
+
+/* مودال و فرم */
+.ad-modal .modal-content{border:0;border-radius:18px;}
+.ad-modal .modal-header{border-bottom:1px solid var(--c-line);padding:18px 24px}
+.ad-modal .modal-title{font-size:1.05rem;font-weight:800}
+.ad-modal .modal-body{padding:20px 24px}
+.ad-modal .modal-footer{border-top:1px solid var(--c-line);padding:14px 24px;gap:8px}
+.ad-modal .modal-header .btn-close{margin:0 auto 0 0}
+.ad-modal label{font-size:.85rem;font-weight:600;margin-bottom:6px}
+.ad-modal .form-control,.ad-modal .form-select{border-radius:12px;border:1px solid #e3e3e3;background-color:var(--c-bg);padding:11px 14px;font-size:.92rem}
+.ad-modal .form-control:focus,.ad-modal .form-select:focus{border-color:var(--c-main);background:#fff;box-shadow:0 0 0 3px rgba(245,163,15,.18)}
+.ad-modal .form-control.is-invalid,.ad-modal .form-select.is-invalid{border-color:var(--c-red);background-image:none}
+.ad-modal .invalid-feedback{font-size:.78rem}
+.ad-modal .form-check-input:checked{background-color:var(--c-main);border-color:var(--c-main)}
+.ad-modal .ltr{direction:ltr;text-align:right}
+.ad-toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,90px);background:#1c1c1c;color:#fff;padding:12px 20px;border-radius:12px;font-size:.9rem;z-index:2000;transition:transform .3s}
+.ad-toast.show{transform:translate(-50%,0)}
+.ad button:focus-visible{outline:3px solid rgba(245,163,15,.5);outline-offset:2px}
+@media (max-width:767.98px){
+    .ad-card{padding:16px;border-radius:14px}
+    .ad-grid{grid-template-columns:1fr}
+    .ad-head .ad-btn{width:100%;justify-content:center}
+    .ad-modal .modal-body{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){.ad *,.ad-toast{transition:none!important}}

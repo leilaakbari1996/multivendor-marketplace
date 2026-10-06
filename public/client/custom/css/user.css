@@ -1,0 +1,171 @@
+
+    /* کارت مشترک */
+.profile-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+    overflow: hidden;
+}
+
+.profile-card-header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f1f1f1;
+    background: #fafafa;
+}
+
+.profile-card-header h5 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.profile-card-header iconify-icon {
+    font-size: 1.4rem;
+    color: var(--bs-primary);
+}
+
+/* آواتار */
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    color: #212529;
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* منو */
+.profile-menu a,
+.profile-menu button {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    width: 100%;
+    padding: .85rem 1.25rem;
+    border: 0;
+    background: transparent;
+    color: #444;
+    text-align: start;
+    text-decoration: none;
+    border-inline-start: 3px solid transparent;
+    transition: background .15s;
+}
+
+.profile-menu a:hover,
+.profile-menu button:hover {
+    background: #fafafa;
+}
+
+.profile-menu a.active {
+    background: #fff8e1;
+    color: #212529;
+    font-weight: 600;
+    border-inline-start-color: var(--bs-primary);
+}
+
+/* فرم */
+.profile-page .form-control {
+    padding: .65rem .9rem;
+    border-radius: 10px;
+}
+
+.profile-page .form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .2rem rgba(255, 193, 7, .25);
+}
+
+.profile-page .form-control:disabled {
+    background: #f6f6f6;
+}
+
+/* دکمه‌ی اصلی با رنگ برند و متن تیره */
+.profile-page .btn-primary {
+    --bs-btn-color: #212529;
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: #212529;
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-color: #212529;
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.profile-page .btn-primary:hover {
+    opacity: .9;
+}
+
+
+     .sidebar-avatar {
+         position: relative;
+         display: block;
+         width: 80px;
+         height: 80px;
+         cursor: pointer;
+     }
+
+    .sidebar-avatar-circle {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .sidebar-avatar-circle img,
+    .sidebar-avatar-letter {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .sidebar-avatar-letter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        background: #fbbf24;
+        color: #1f2937;
+    }
+
+    /* آیکون دوربین، همیشه دیده می‌شه */
+    .sidebar-avatar-badge {
+        position: absolute;
+        bottom: 0;
+        inset-inline-end: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #fbbf24;
+        color: #1f2937;
+        font-size: 1.05rem;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+        transition: transform .2s;
+    }
+
+    .sidebar-avatar:hover .sidebar-avatar-badge {
+        transform: scale(1.1);
+    }
+    .profile-menu button.text-danger {
+        color: #dc3545 !important;
+        opacity: 1;
+    }
+    .sidebar-avatar-badge {
+        width: 26px;
+        height: 26px;
+    }
