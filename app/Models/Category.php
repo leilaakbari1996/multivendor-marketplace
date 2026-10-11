@@ -83,7 +83,20 @@ class Category extends Model
     {
         return $query
             ->whereNull('parent_id')
+            ->active();
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query
             ->where('is_active', true);
+    }
+
+    public function scopeSlug(Builder $query, string $slug): Builder
+    {
+        return $query
+            ->where('slug', $slug)
+            ;
     }
     //endregion
 

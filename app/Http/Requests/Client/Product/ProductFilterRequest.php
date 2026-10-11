@@ -24,8 +24,8 @@ class ProductFilterRequest extends FormRequest
 
             'category' => [
                 'nullable',
-                'integer',
-                Rule::exists(Category::class, 'id'),
+                'string',
+                Rule::exists(Category::class, 'slug'),
             ],
 
             'min_price' => [

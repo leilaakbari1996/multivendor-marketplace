@@ -1,6 +1,6 @@
-@props(['product', 'inCart' => 0])
+@props(['product', 'inCart' => 0, 'buttonType' => 'button' ,'buttonText' => 'افزودن به سبد'])
 
-<div class="pd-buy"
+<div class="pd-buy pd-buy-{{$product->id}}"
      style="width: 100%"
 >
     <div class="pd-qty product-qty">
@@ -25,12 +25,11 @@
                 aria-label="کاهش"
             @disabled($inCart <= 0)>−</button>
     </div>
-
-    <button type="button"
+    <button type="{{ $buttonType }}"
             class="btn-cart add-cart"
             data-cart
             data-product-id="{{ $product->id }}">
         <i class="bi bi-bag-plus"></i>
-        <span>افزودن به سبد</span>
+        <span>{{ $buttonText }}</span>
     </button>
 </div>

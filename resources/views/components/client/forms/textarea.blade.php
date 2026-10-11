@@ -6,6 +6,7 @@
     'rows' => 3,
     'feedback' => null,
     'wrapperClass' => 'mb-3',
+    'optional' => false
 ])
 
 @php
@@ -17,7 +18,11 @@
 <div class="{{ $wrapperClass }}">
 
     @if($label)
-        <label for="{{ $id }}" class="form-label fw-semibold">{{ $label }}</label>
+        <x-client.forms.label
+            :for="$id"
+            :label="$label"
+            :optional="$optional"
+        />
     @endif
 
     {{-- محتوای textarea نباید فاصله یا خط اضافه داشته باشد --}}
@@ -26,7 +31,7 @@
         name="{{ $name }}"
         rows="{{ $rows }}"
         {{ $attributes->merge([
-            'class' => 'form-control rounded-3' . ($hasError ? ' is-invalid' : ''),
+            'class' => 'rounded-3' . ($hasError ? ' is-invalid' : ''),
         ]) }}
     >{{ $textValue }}</textarea>
 

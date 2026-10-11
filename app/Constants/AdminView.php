@@ -58,6 +58,10 @@ final class AdminView
     public const COUPON_CREATE = self::PERFIX . 'coupons.create';
     public const COUPON_EDIT = self::PERFIX . 'coupons.edit';
 
+    // Contact
+    public const CONTACT_INDEX = self::PERFIX . 'contacts.index';
+    public const CONTACT_EDIT = self::PERFIX . 'contacts.edit';
+
     // media
     public const MEDIA_INDEX = self::PERFIX .'media.index';
 

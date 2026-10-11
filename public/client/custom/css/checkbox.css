@@ -1,0 +1,62 @@
+
+.field label.check,
+label.check {
+    display: inline-flex;
+    align-items: center;
+    gap: .625rem;
+    margin: 0;
+    padding-block: .25rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--c-mute);
+    font-size: var(--bs-body-font-size, .9rem);
+}
+
+.check-input {
+    padding: 0 !important;
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    border: 1.5px solid color-mix(in srgb, var(--c-mute) 45%, #fff);
+    border-radius: 7px;
+    background: #fff center / 100% no-repeat;
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, box-shadow .15s;
+}
+
+.check-input:hover {
+    border-color: var(--c-main);
+}
+
+.check-input:focus-visible {
+    outline: 0;
+    border-color: var(--c-main);
+    box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--c-main) 25%, transparent);
+}
+
+.check-input:checked {
+    background-color: var(--c-main);
+    border-color: var(--c-main);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.check-input:checked:hover {
+    background-color: var(--c-main-d);
+    border-color: var(--c-main-d);
+}
+
+label.check:has(.check-input:checked) {
+    color: var(--c-ink);
+}
+
+.check-input.invalid {
+    border-color: #dc3545;
+}
+
+.check-input:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}

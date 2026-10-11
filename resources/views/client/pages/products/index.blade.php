@@ -8,11 +8,6 @@
         type="text/css"
         href="{{ asset('client/custom/css/product-show.css') }}"
     >
-    <link
-        rel="stylesheet"
-        type="text/css"
-        href="{{ asset('client/custom/css/product-qty.css') }}"
-    >
 @endpush
 
 @section('content')

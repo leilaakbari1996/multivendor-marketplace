@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\ContactController;
 
 Route::get('/',[DashboardController::class,'index'])->name('dashboard');
 
@@ -221,4 +222,13 @@ Route::prefix('post')->name('post.')->group(function () {
     Route::get('/', [PostController::class, 'index'])
         ->name('index');
 
+});
+
+Route::prefix('contacts')->name('contacts.')->group(function (){
+
+    Route::get('/data', [ContactController::class, 'data'])
+        ->name('data');
+    Route::get('/',[ContactController::class,'index'])->name('index');
+    Route::get('/{contactMessage}',[ContactController::class,'edit'])->name('edit');
+    Route::put('/{contactMessage}',[ContactController::class,'update'])->name('update');
 });

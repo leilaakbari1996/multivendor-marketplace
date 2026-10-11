@@ -94,8 +94,7 @@ class Post extends Model
     public function scopeFeatured(Builder $query): Builder
     {
         return $query
-            ->where('is_featured', true)
-            ->published();
+            ->where('is_featured', true);
     }
 
     public function scopeSearch(Builder $query, string $term): Builder

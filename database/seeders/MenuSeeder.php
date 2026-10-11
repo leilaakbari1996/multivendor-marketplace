@@ -38,7 +38,7 @@ class MenuSeeder extends Seeder
             [
                 'title' => 'تماس با ما',
                 'slug' => 'contact-us',
-                'url' => '#',
+                'url' => 'contact',
                 'sort_order' => 5,
             ],
         ];
@@ -72,7 +72,7 @@ class MenuSeeder extends Seeder
             parent: $about,
             title: 'درباره ما',
             slug: 'about-us',
-            url: '#',
+            url: 'about',
             sortOrder: 1,
         );
 
@@ -88,7 +88,7 @@ class MenuSeeder extends Seeder
             parent: $about,
             title: 'تماس با ما',
             slug: 'contact-us',
-            url: '#',
+            url: 'contact',
             sortOrder: 3,
         );
 

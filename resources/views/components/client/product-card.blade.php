@@ -1,7 +1,7 @@
 
 @php
     $inCart = $cartQuantities[$product->id] ?? 0;
-    $url = route('products.show',$product->id) ;
+    $url = route('products.show',$product->slug) ;
 @endphp
 <div class="product-item position-relative">
 

@@ -11,7 +11,7 @@
 
         <form id="profileForm"
               class="p-4"
-              action="{{ route('user.update') }}"
+              action="{{ route('profile.update') }}"
               method="POST">
             @csrf
             @method('PUT')
@@ -53,7 +53,7 @@
 
         <form id="passwordForm"
               class="p-4"
-              action="{{ route('user.password') }}"
+              action="{{ route('profile.password') }}"
               method="POST">
             @csrf
             @method('PUT')

@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class Order extends Model
 {
     protected $fillable = [
         'user_id',
+        'coupon_id', // ← در fillable قبلی نبود
         'order_number',
         'subtotal',
         'discount_amount',
@@ -81,6 +83,7 @@ class Order extends Model
     {
         return $query->where('status', OrderStatus::REFUNDED);
     }
+
     public function scopePaid(Builder $query): Builder
     {
         return $query->whereIn('status', [
@@ -88,6 +91,24 @@ class Order extends Model
             OrderStatus::SHIPPED,
             OrderStatus::DELIVERED,
         ]);
+    }
+
+    /** سفارش‌های یک کاربر مشخص (مدل یا id) */
+    public function scopeForUser(Builder $query, User|int $user): Builder
+    {
+        return $query->where('user_id', $user instanceof User ? $user->getKey() : $user);
+    }
+
+    /** فیلتر وضعیت؛ اگر null باشد هیچ فیلتری اعمال نمی‌شود (برای تب «همه») */
+    public function scopeOfStatus(Builder $query, ?OrderStatus $status): Builder
+    {
+        return $query->when($status, fn (Builder $q) => $q->where('status', $status));
+    }
+
+    /** جستجو با شماره سفارش */
+    public function scopeByNumber(Builder $query, string $orderNumber): Builder
+    {
+        return $query->where('order_number', $orderNumber);
     }
 
     //endregion
@@ -102,6 +123,11 @@ class Order extends Model
     public function isProcessing(): bool
     {
         return $this->status === OrderStatus::PROCESSING;
+    }
+
+    public function statusAt(OrderStatus $status): ?Carbon
+    {
+        return $this->statusHistories->last(fn ($h) => $h->status === $status)?->created_at;
     }
 
     public function isShipped(): bool
@@ -124,7 +150,11 @@ class Order extends Model
         return $this->status === OrderStatus::REFUNDED;
     }
 
+    /** برای نمایش دکمه «لغو سفارش» (قانون کسب‌وکار را در صورت نیاز تغییر بده) */
+    public function canBeCancelled(): bool
+    {
+        return $this->isPending() || $this->isProcessing();
+    }
+
     //endregion
-
-
 }

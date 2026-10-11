@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Otp extends Model
@@ -19,4 +20,11 @@ class Otp extends Model
         'verified_at' => 'datetime',
         'attempts' => 'integer',
     ];
+
+    //region Scopes
+    public function scopeForMobile(Builder $query, string $mobile): Builder
+    {
+        return $query->where('mobile', $mobile);
+    }
+    //endregion
 }

@@ -14,4 +14,12 @@ class CategoryQuery
             ->orderBy('sort_order')
             ->get();
     }
+
+    public static function findBySlug(string $slug): ?Category
+    {
+        return Category::query()
+            ->active()
+            ->slug($slug)
+            ->first();
+    }
 }

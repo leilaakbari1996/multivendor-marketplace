@@ -63,7 +63,7 @@ class Product extends Model
 
     public function getRouteKeyName(): string
     {
-        return 'id';
+        return 'slug';
     }
 
     //region Morphs
@@ -132,7 +132,6 @@ class Product extends Model
     {
         return $query->with([
             'image',
-            'category',
         ])->when(
             AuthUser::check(),
             fn (Builder $query) => $query->with([

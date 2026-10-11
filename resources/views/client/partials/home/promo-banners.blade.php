@@ -42,7 +42,7 @@
                             @if($banner->url)
                                 <a
                                     href="{{ $banner->url }}"
-                                    class="btn btn-dark text-uppercase"
+                                    class="btn btn-dark text-uppercase w-auto"
                                 >
                                     مشاهده
                                 </a>

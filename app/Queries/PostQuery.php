@@ -10,13 +10,30 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PostQuery
 {
+    public function limit(int $limit = BlogConstant::PER_PAGE, array $filters = []): Collection
+    {
+        return Post::query()
+            ->published()
+            ->with([
+                'image',
+                'likes',
+            ])
+            ->when(
+                $filters['featured'] ?? null,
+                fn (Builder $query) => $query->featured()
+            )
+            ->latest('published_at')
+            ->limit($limit)
+            ->get();
+    }
+
     public function paginate(int $perPage = BlogConstant::PER_PAGE, array $filters = []): LengthAwarePaginator
     {
         return Post::query()
             ->published()
             ->with([
                 'image',
-                'author',
+                'likes',
             ])
             ->when(
                 $filters['search'] ?? null,

@@ -39,7 +39,7 @@ class HomeQuery
     public function latestPosts()
     {
         $filter['featured'] = true;
-        return $this->postQuery->paginate(3,$filter);
+        return $this->postQuery->limit(3,$filter);
     }
     public function shopBenefits()
     {

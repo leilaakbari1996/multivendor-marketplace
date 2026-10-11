@@ -11,11 +11,6 @@
     <link
         rel="stylesheet"
         type="text/css"
-        href="{{ asset('client/custom/css/product-qty.css') }}"
-    >
-    <link
-        rel="stylesheet"
-        type="text/css"
         href="{{ asset('client/custom/css/breadcrumb.css') }}"
     >
 @endpush

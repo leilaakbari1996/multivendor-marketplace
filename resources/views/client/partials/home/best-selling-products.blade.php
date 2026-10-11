@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+        <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-2xl-4 justify-content-start">
 
             @foreach($bestSellingProducts as $product)
 

@@ -60,18 +60,18 @@
                         </div>
 
                         <nav class="profile-menu">
-                            <a href="{{-- route('profile.index') --}}"
+                            <a href="{{ route('profile.index') }}"
                                class="{{ request()->routeIs('profile.index') ? 'active' : '' }}">
                                 <iconify-icon icon="uil:user"></iconify-icon>
                                 اطلاعات حساب
                             </a>
-                            <a href="{{-- route('profile.orders') --}}"
-                               class="{{ request()->routeIs('profile.orders') ? 'active' : '' }}">
+                            <a href="{{ route('profile.orders.index') }}"
+                               class="{{ request()->routeIs('profile.orders.index') ? 'active' : '' }}">
                                 <iconify-icon icon="uil:box"></iconify-icon>
                                 سفارش‌های من
                             </a>
                             <a href="{{ route('profile.addresses.index') }}"
-                               class="{{ request()->routeIs('profile.addresses') ? 'active' : '' }}">
+                               class="{{ request()->routeIs('profile.addresses.index') ? 'active' : '' }}">
                                 <iconify-icon icon="uil:map-marker"></iconify-icon>
                                 آدرس‌ها
                             </a>
@@ -81,7 +81,7 @@
                                 علاقه‌مندی‌ها
                             </a>
 
-                            <form action="{{-- route('logout') --}}" method="POST">
+                            <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="text-danger">
                                     <iconify-icon icon="uil:signout"></iconify-icon>

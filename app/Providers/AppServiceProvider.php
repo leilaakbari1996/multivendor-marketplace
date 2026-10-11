@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Queries\CartQuery;
 use App\View\Composers\CartComposer;
 use App\View\Composers\MenuComposer;
 use App\View\Composers\NavigationComposer;
@@ -17,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        $this->app->scoped(CartQuery::class);
+        $this->app->scoped(CartComposer::class);
     }
 
     /**

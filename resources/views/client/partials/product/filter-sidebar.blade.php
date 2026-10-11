@@ -47,7 +47,7 @@
                     name="category"
                     label="دسته‌بندی"
                     placeholder="همه دسته‌بندی‌ها"
-                    :options="$categories->pluck('name', 'id')"
+                    :options="$categories->pluck('name','slug')"
                     :selected="request('category')"
                 />
 

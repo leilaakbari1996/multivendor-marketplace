@@ -1,11 +1,7 @@
 @extends('client.layouts.app')
 
 @push('styles')
-    <link
-        rel="stylesheet"
-        type="text/css"
-        href="{{ asset('client/custom/css/product-qty.css') }}"
-    >
+
 @endpush
 @section('content')
 

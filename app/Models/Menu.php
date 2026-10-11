@@ -31,7 +31,7 @@ class Menu extends Model
     public function children()
     {
         return $this->hasMany(Menu::class, 'parent_id')
-            ->orderBy('sort_order');
+            ;
     }
 
     public function parent()
@@ -96,7 +96,8 @@ class Menu extends Model
                 'children' => fn ($query) => $query
                     ->active()
                     ->ordered()
-            ]);
+            ])
+            ;
     }
 
     //endregion

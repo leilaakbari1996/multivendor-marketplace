@@ -14,10 +14,12 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
-    use Notifiable,SoftDeletes;
+    use Notifiable, SoftDeletes, HasApiTokens;
 
     protected $fillable = [
         'user_name',
@@ -91,6 +93,13 @@ class User extends Authenticatable
         return $this->type === UserType::CUSTOMER;
     }
 
+    //endregion
+
+    //region Scopes
+    public function scopeForMobile(Builder $query, string $mobile): Builder
+    {
+        return $query->where('mobile', $mobile);
+    }
     //endregion
 
     //region Morphs

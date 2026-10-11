@@ -1,0 +1,52 @@
+.card-box{border:1px solid #ececec;border-radius:18px;background:#fff}
+.avatar{width:80px;height:80px;border-radius:50%;background:var(--c-main);font-size:2.2rem;font-weight:700;color:#3a2a00}
+.side-link{display:block;padding:1.1rem 1.75rem;color:inherit;text-decoration:none;border-right:3px solid transparent}
+.side-link.active{background:var(--brand-soft);border-right-color:var(--c-main);font-weight:700}
+.btn-brand{background:var(--c-main);color:#3a2a00;font-weight:700;border:0}
+.btn-brand:hover{background:#e29a0c;color:#3a2a00}
+.nav-pills .nav-link{color:#7a7a7a;border:1px solid #ececec;border-radius:20px;padding:.3rem 1rem;font-size:.82rem}
+.nav-pills .nav-link.active{background:var(--c-main);border-color:var(--c-main);color:#fff;font-weight:700}
+.foot-line{border-top:1px dashed #d8d8d8}
+.link-hot{color:var(--c-main-d);font-weight:700}
+.chip{border:1px solid #ececec;border-radius:10px;padding:.2rem .6rem;background:#fff;color:var(--bs-secondary)}
+.empty-box{border:2px dashed #dcdcdc;border-radius:14px;min-height:160px}
+.text-secondary{color:var(--bs-secondary) !important}
+
+/* ---------- رنگ هر وضعیت: یک متغیر، هم برای نشان هم برای کادر سفارش ---------- */
+.st-pending { --st: var(--bs-secondary); }
+.st-processing    { --st: var(--c-main); }
+.st-shipped    { --st: #3b82f6; }
+.st-delivered    { --st: var(--bs-success); }
+.st-cancelled  { --st: var(--bs-danger); }
+.st-refunded  { --st: #495057; }
+
+/* کادر سفارش: پس‌زمینه ملایم و حاشیه هم‌رنگ وضعیت */
+.order{
+    border:1px solid color-mix(in srgb, var(--st, #ececec) 45%, #fff);
+    background:color-mix(in srgb, var(--st, #fff) 8%, #fff);
+    border-radius:14px;
+}
+
+/* نشان وضعیت */
+.badge.st-pending,.badge.st-processing,.badge.st-shipped,
+.badge.st-delivered,.badge.st-cancelled,.badge.st-refunded{
+    background:var(--st);
+    color:#fff;
+    font-weight:500;
+}
+
+/* حالت لودینگ هنگام فیلتر AJAX */
+#orders-list{transition:opacity .15s}
+#orders-list.is-loading{opacity:.45;pointer-events:none}
+
+/* ---------- صفحه جزئیات سفارش: نوار مراحل ---------- */
+.order-steps{display:flex;list-style:none;padding:0;margin:0}
+.order-steps li{flex:1;text-align:center;position:relative;font-size:.82rem;color:var(--bs-secondary)}
+.order-steps li::before{content:'';position:absolute;top:13px;left:50%;width:100%;height:2px;background:#e3e3e3}
+.order-steps li:first-child::before{display:none}
+.order-steps li.done::before,.order-steps li.current::before{background:var(--st)}
+.order-steps .dot{position:relative;z-index:1;display:grid;place-items:center;width:28px;height:28px;margin:0 auto .4rem;border-radius:50%;background:#fff;border:2px solid #d9d9d9;font-size:.75rem}
+.order-steps .done .dot{background:var(--st);border-color:var(--st);color:#fff}
+.order-steps .current .dot{border-color:var(--st);color:var(--st);font-weight:700}
+.order-steps .current .lbl{color:var(--bs-body-color);font-weight:700}
+.order-steps .date{display:block;font-size:.72rem;color:var(--bs-secondary);font-weight:400}

@@ -35,6 +35,18 @@ const ToastBase = Swal.mixin({
     },
 });
 
+function showAlert(id, type, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'alert alert-' + type;
+    el.textContent = msg;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function hideAlert(id) {
+    const el = document.getElementById(id);
+    if (el) el.className = 'alert d-none';
+}
 /**
  * توست‌های آماده برای هر نوع پیام
  */

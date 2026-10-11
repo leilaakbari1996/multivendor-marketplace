@@ -8,16 +8,17 @@ use Illuminate\View\View;
 
 class CartComposer
 {
-    private ?array $data = null;
-
+    public $data = [] ;
     public function __construct(
         private readonly CartQuery $cartQuery,
     ) {}
 
     public function compose(View $view): void
     {
-        $this->data ??= $this->cartQuery->summary(AuthUser::id());
-
+        if (empty($this->data))
+        {
+            $this->data = $this->cartQuery->summary(AuthUser::id());
+        }
         $view->with($this->data);
     }
 }

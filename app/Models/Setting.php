@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
@@ -11,6 +12,11 @@ class Setting extends Model
         'key',
         'value',
         'type',
+        'page'
+    ];
+
+    protected $casts = [
+        'page' => Page::class
     ];
 
     //region Morphs

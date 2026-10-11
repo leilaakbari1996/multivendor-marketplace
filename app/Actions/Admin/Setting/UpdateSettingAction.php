@@ -66,6 +66,8 @@ class UpdateSettingAction
             file: $file,
             collection: MediaCollection::IMAGE,
             directory: 'settings',
+            width: null,
+            height: null
         );
 
         $setting->update([

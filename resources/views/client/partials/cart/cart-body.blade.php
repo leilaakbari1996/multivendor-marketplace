@@ -1,8 +1,8 @@
 <div class="offcanvas-body d-flex flex-column">
     <ul class="list-group list-group-flush mb-3">
         @forelse ($cartItems as $item)
-            <li class="list-group-item px-0 py-3">
-                <div class="d-flex justify-content-between align-items-start gap-2">
+            <li class="list-group-item px-0 py-3 product-item">
+                <div class="d-flex justify-content-between align-items-start">
                     <div class="flex-grow-1">
                         <h6 class="my-0 mb-1">{{ $item->product->name }}</h6>
 
@@ -20,39 +20,30 @@
                         </span>
                 </div>
 
-                <div class="d-flex align-items-center justify-content-between gap-2 mt-3">
+                <div class="d-flex align-items-center justify-content-around gap-1 mt-3">
                     {{-- تغییر تعداد --}}
                     <form
+                        data-product-id = {{ $item->product_id }}
                         action="{{ route('cart.update', $item->product_id) }}"
                         method="POST"
                         class="d-flex align-items-center gap-2">
                         @csrf
                         @method('PATCH')
-
-                        <div class="input-group input-group-sm" style="width: 110px;" dir="ltr">
-                            <button type="button" class="btn btn-outline-secondary" data-qty-minus>−</button>
-                            <input type="number" name="quantity" value="{{ $item->quantity }}"
-                                   min="0" max="{{ \App\Constants\Client\CartConstant::MAX_QUANTITY_PER_ITEM }}"
-                                   class="form-control text-center">
-                            <button type="button" class="btn btn-outline-secondary" data-qty-plus>+</button>
-                        </div>
-
-                        <button type="submit" class="btn btn-outline-primary btn-sm">بروزرسانی</button>
+                        <x-client.product-qty :product="$item->product" :in-cart="$item->quantity" buttonType="submit" buttonText="بروزرسانی" />
                     </form>
 
                     {{-- حذف --}}
                     <form
+                        data-product-id = {{ $item->product_id }}
+                        class="pd-buy"
                         action="{{ route('cart.destroy', $item->product_id) }}"
                         method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                                class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1"
+                                class="btn-cart"
+                                style="padding: 0 15px"
                                 title="حذف از سبد">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                            </svg>
                             حذف
                         </button>
                     </form>

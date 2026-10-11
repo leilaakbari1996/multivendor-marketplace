@@ -12,20 +12,42 @@
 
                     <div class="d-flex align-items-center">
 
-                        <div class="swiper-buttons">
-                            <button
-                                class="swiper-prev category-carousel-prev btn btn-yellow"
-                                type="button"
+                        <div class="swiper-buttons d-flex gap-1">
+{{--                            <button--}}
+{{--                                class=" btn-yellow swiper-prev category-carousel-prev"--}}
+{{--                                type="button"--}}
+{{--                            >--}}
+{{--                                ❮--}}
+{{--                            </button>--}}
+
+                            <x-client.button
+                                type="submit"
+                                variant="yellow"
+                                class="btn-sm swiper-prev category-carousel-prev"
+                                width="auto"
+                                textColor="black"
+                                background="#F1F1F1"
                             >
                                 ❮
-                            </button>
+                            </x-client.button>
 
-                            <button
-                                class="swiper-next category-carousel-next btn btn-yellow"
-                                type="button"
+                            <x-client.button
+                                type="submit"
+                                variant="yellow"
+                                textColor="black"
+                                class="btn-sm swiper-next category-carousel-next "
+                                width="auto"
+                                background="#F1F1F1"
                             >
                                 ❯
-                            </button>
+                            </x-client.button>
+
+{{--                            <button--}}
+{{--                                class="btn-yellow swiper-next category-carousel-next"--}}
+{{--                                type="button"--}}
+{{--                            >--}}
+{{--                                ❯--}}
+{{--                            </button>--}}
                         </div>
 
                     </div>
@@ -45,7 +67,7 @@
                         @foreach($categories as $category)
 
                             <a
-                                href="#"
+                                href="{{ route('products.index', ['category' => $category->slug]) }}"
                                 class="nav-link category-item swiper-slide"
                             >
 

@@ -6,6 +6,7 @@ use App\Constants\Client\ProductConstant;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductQuery
 {
@@ -15,7 +16,12 @@ class ProductQuery
             ->withHomeRelations();
     }
 
-    public function bestSelling(int $perPage = 8): LengthAwarePaginator
+    public function publishedCount(): int
+    {
+        return Product::query()->published()->count();
+    }
+
+    public function bestSelling(int $limit = 8): Collection
     {
         return $this->query()
             ->where(function ($query) {
@@ -35,14 +41,16 @@ class ProductQuery
                 },
             ], 'quantity')
             ->orderBySoldQuantity()
-            ->paginate($perPage);
+            ->limit($limit)
+            ->get();
     }
 
-    public function featured(int $perPage = 8): LengthAwarePaginator
+    public function featured(int $limit = 8): Collection
     {
         return $this->query()
             ->publishedFeatured()
-            ->paginate($perPage);
+            ->limit($limit)
+            ->get();
     }
 
 
@@ -50,6 +58,14 @@ class ProductQuery
         array $filters = ProductConstant::DEFAULT_FILTERS,
         int $perPage = ProductConstant::PER_PAGE,
     ): LengthAwarePaginator {
+
+        $categoryId = null;
+        if (!empty($filters['category']))
+        {
+            $category = CategoryQuery::findBySlug($filters['category']);
+            $categoryId = $category->id;
+        }
+
         return $this->query()
             ->published()
             ->when(
@@ -61,7 +77,7 @@ class ProductQuery
                 )
             )
             ->when(
-                $filters['category'] ?? null,
+                $categoryId ?? null,
                 fn (Builder $query, int $categoryId) => $query->where(
                     'category_id',
                     $categoryId

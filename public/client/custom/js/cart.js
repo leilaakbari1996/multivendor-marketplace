@@ -88,6 +88,7 @@
             .done(function (response) {
                 toast.success(response.message);
                 updateCartSummary(response.cart);
+                $(`.pd-buy-${productId} .input-number`).val(quantity);
                 openCart();
             })
             .fail(showErrors)
@@ -114,10 +115,8 @@
 
     $(document).on('submit', '#cartBody form', function (e) {
         e.preventDefault();
-
         const $form = $(this);
         const action = $form.attr('action');
-
         if (!action) return;
 
         const method = ($form.find('input[name="_method"]').val() || 'POST').toUpperCase();
@@ -141,13 +140,23 @@
             .done(function (response) {
                 toast.success(response.message);
                 updateCartSummary(response.cart);
+                console.log(response)
+                console.log(method)
+                if (method === 'DELETE')
+                {
+                    console.log('ok')
+                    let productId = $form.data('productId');
+
+                    console.log(productId)
+                    $(`.pd-buy-${productId} .input-number`).val(0);
+                }
             })
             .fail(showErrors)
             .always(function () {
                 $submit.prop('disabled', false);
             });
     });
-    
+
 
 
 })(jQuery);

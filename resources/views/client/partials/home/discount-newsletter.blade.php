@@ -37,34 +37,24 @@
                         >
                             @csrf
 
-                            <div class="mb-3">
-
-                                <label
-                                    for="email"
-                                    class="form-label"
-                                >
-                                    ایمیل
-                                </label>
-
-                                <input
-                                    type="email"
-                                    class="form-control form-control-lg"
-                                    name="email"
-                                    id="email"
-                                    placeholder="ایمیل خود را وارد کنید"
-                                    required
-                                >
-
-                            </div>
+                            <x-client.forms.input
+                                name="email"
+                                id="email"
+                                type="email"
+                                placeholder="ایمیل خود را وارد کنید"
+                                required
+                                class="mb-4"
+                            />
 
                             <div class="d-grid gap-2">
 
-                                <button
+                                <x-client.button
                                     type="submit"
-                                    class="btn btn-dark btn-lg"
+                                    variant="dark"
+                                    class="btn-lg"
                                 >
                                     عضویت در خبرنامه
-                                </button>
+                                </x-client.button>
 
                             </div>
 
