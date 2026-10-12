@@ -632,6 +632,33 @@ use App\Constants\AdminView;
             </li>
 
             <li class="menu">
+                <a href="#faqs" data-bs-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span> سوالات متداول</span>
+                    </div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
+                </a>
+                <ul class="collapse submenu list-unstyled" id="faqs" data-bs-parent="#accordionExample">
+                    <li class="">
+                        <a href="{{ route(AdminView::PERFIX_ROUTE.'faq.create') }}"> ایجاد </a>
+                    </li>
+                    <li>
+                        <a href="{{ route(AdminView::PERFIX_ROUTE.'faq.index') }}"> لیست </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu">
 
                 <a
                     href="#settings"

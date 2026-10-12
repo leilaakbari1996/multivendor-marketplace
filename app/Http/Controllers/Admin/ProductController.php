@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Admin\Product\StoreProductAction;
 use App\Actions\Admin\Product\UpdateProductAction;
 use App\Constants\AdminView;
+use App\Enums\CategoryType;
 use App\Enums\MediaCollection;
 use App\Enums\ProductStatus;
 use App\Enums\VendorStatus;
@@ -97,20 +98,15 @@ class ProductController extends Controller
         $title = 'ایجاد محصول';
 
         $vendors = Vendor::query()
-            ->where('status', VendorStatus::APPROVED)
+            ->approved()
             ->orderBy('store_name')
-            ->get([
-                'id',
-                'store_name',
-            ]);
+            ->get(['id', 'store_name']);
 
         $categories = Category::query()
-            ->where('is_active', true)
+            ->active()
+            ->ofType(CategoryType::Product)
             ->orderBy('name')
-            ->get([
-                'id',
-                'name',
-            ]);
+            ->get(['id', 'name']);
 
         $statuses = ProductStatus::options();
 

@@ -97,6 +97,16 @@
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-xxl-12 mb-4">
+                                    <x-admin.forms.switch
+                                        name="is_main"
+                                        label="دسته‌ی اصلی ؟"
+                                        :checked="false"
+                                    />
+                                </div>
+                            </div>
+
                             <div class="col-xxl-12 col-md-12 mb-4">
                                 <x-admin.forms.input
                                     name="tags"
@@ -113,6 +123,16 @@
                                     :options="$categories->pluck('name', 'id')->toArray()"
                                     :value="old('category')"
                                     placeholder="انتخاب دسته بندی والد"
+                                />
+                            </div>
+
+                            <div class="col-xxl-12 col-md-12 mb-4">
+                                <x-admin.forms.tom-select
+                                    name="type"
+                                    :options="\App\Enums\CategoryType::options()"
+                                    :value="old('type')"
+                                    placeholder="نوع دسته‌بندی"
+                                    :label="'نوع دسته‌بندی'"
                                 />
                             </div>
 

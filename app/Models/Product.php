@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Pishran\LaravelPersianSlug\HasPersianSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -23,7 +24,7 @@ class Product extends Model
 
     protected $fillable = [
         'vendor_id',
-        'category_id',
+//        'category_id',
         'name',
         'slug',
         'sku',
@@ -67,6 +68,11 @@ class Product extends Model
     }
 
     //region Morphs
+
+    public function categories(): MorphToMany
+    {
+        return $this->morphToMany(Category::class, 'categorizable');
+    }
     public function likes(): MorphMany
     {
         return $this->morphMany(Like::class, 'likeable');
@@ -102,11 +108,6 @@ class Product extends Model
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(Vendor::class);
-    }
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
     }
 
     public function orderItems(): HasMany

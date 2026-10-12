@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Actions\Admin\Media\StoreMediaAction;
+use App\Enums\CategoryType;
 use App\Enums\MediaCollection;
 use App\Enums\ProductStatus;
 use App\Models\Category;
@@ -22,13 +23,15 @@ class ProductSeeder extends Seeder
     {
         $vendor = Vendor::query()->first();
 
-        if (!$vendor) {
+        if (! $vendor) {
             throw new RuntimeException(
                 'No vendor found. Please seed vendors before running ProductSeeder.'
             );
         }
 
+        // فقط دسته‌های نوع «محصول» (جلوگیری از برخورد با دسته‌های هم‌نام در بخش‌های دیگر)
         $categories = Category::query()
+            ->where('type', CategoryType::Product->value)
             ->whereIn('name', [
                 'میوه و سبزیجات',
                 'نان و شیرینی',
@@ -143,9 +146,9 @@ class ProductSeeder extends Seeder
         foreach ($products as $data) {
             $categoryId = $categories->get($data['category']);
 
-            if (!$categoryId) {
+            if (! $categoryId) {
                 throw new RuntimeException(
-                    "Category [{$data['category']}] not found."
+                    "Category [{$data['category']}] not found. Run CategorySeeder first."
                 );
             }
 
@@ -159,16 +162,18 @@ class ProductSeeder extends Seeder
             $product = Product::create([
                 ...$data,
                 'vendor_id' => $vendor->id,
-                'category_id' => $categoryId,
                 'status' => ProductStatus::PUBLISHED,
                 'is_featured' => true,
                 'featured_from' => $featuredFrom,
                 'featured_until' => $featuredUntil,
             ]);
 
+            // رابطه‌ی مورف: ثبت در جدول categorizables
+            $product->categories()->sync([$categoryId]);
+
             $imagePath = public_path("client/images/{$image}");
 
-            if (!is_file($imagePath)) {
+            if (! is_file($imagePath)) {
                 throw new RuntimeException(
                     "Product image [{$image}] not found."
                 );
@@ -191,4 +196,3 @@ class ProductSeeder extends Seeder
         }
     }
 }
-

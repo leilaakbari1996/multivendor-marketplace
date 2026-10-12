@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -53,6 +54,13 @@ class StoreRequest extends FormRequest
             ],
 
             'is_active' => [
+                'nullable',
+                'boolean',
+            ],
+
+            'type' => ['required', Rule::enum(\App\Enums\CategoryType::class)],
+
+            'is_main' => [
                 'nullable',
                 'boolean',
             ],

@@ -15,6 +15,11 @@ final class AdminView
     public const DASHBOARD_INDEX = self::PERFIX.'dashboard.index';
     public const DASHBOARD_TITLE = 'داشبورد';
 
+    //Faqs
+    public const FAQ_INDEX  = 'admin.pages.faqs.index';
+    public const FAQ_CREATE = 'admin.pages.faqs.create';
+    public const FAQ_EDIT   = 'admin.pages.faqs.edit';
+
     // Categories
     public const CATEGORY_INDEX = self::PERFIX.'categories.index';
     public const CATEGORY_CREATE = self::PERFIX.'categories.create';

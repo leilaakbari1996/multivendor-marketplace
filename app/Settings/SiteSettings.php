@@ -206,6 +206,26 @@ class SiteSettings
                 'required' => false,
             ],
 
+            // صفحه سوالات متداول (FAQ)
+
+            [
+                'page' => 'faq',
+                'label' => 'عنوان هیرو سوالات متداول',
+                'type' => 'text',
+                'name' => 'faq_hero_title',
+                'placeholder' => 'سوالات متداول',
+                'required' => false,
+            ],
+
+            [
+                'page' => 'faq',
+                'label' => 'توضیحات هیرو سوالات متداول',
+                'type' => 'textarea',
+                'name' => 'faq_hero_description',
+                'placeholder' => 'پاسخ سوالات پرتکرار شما درباره خرید، سفارش و خدمات مارکت هاب.',
+                'required' => false,
+            ],
+
         ];
     }
 

@@ -115,6 +115,14 @@
                             />
                         </div>
 
+                        <div class="col-xxl-12 mb-4">
+                            <x-admin.forms.switch
+                                name="is_main"
+                                label="دسته اصلی ؟ "
+                                :checked="old('is_main', $category->is_main)"
+                            />
+                        </div>
+
                     </div>
 
                     {{-- Tags --}}
@@ -139,6 +147,16 @@
                             value="{{ old('category', $category->parent_id) }}"
                         />
                     </div>
+                    <div class="col-xxl-12 col-md-12 mb-4">
+                        <x-admin.forms.tom-select
+                            name="type"
+                            :options="\App\Enums\CategoryType::options()"
+                            value="{{ old('type', $category->type) }}"
+                            placeholder="نوع دسته‌بندی"
+                            :label="'نوع دسته‌بندی'"
+                        />
+                    </div>
+
                     {{-- Image --}}
                     <div class="col-xxl-12 col-md-12 mb-4">
 

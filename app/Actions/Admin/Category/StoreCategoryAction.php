@@ -26,6 +26,8 @@ class StoreCategoryAction
 
             $category = Category::create($data);
 
+
+
             if ($image instanceof UploadedFile) {
                 $this->storeMediaAction->execute(
                     model: $category,

@@ -41,8 +41,10 @@
                     <thead>
                     <tr>
                         <th>عنوان</th>
+                        <th>نوع دسته‌بندی</th>
                         <th>دسته‌بندی والد</th>
                         <th>وضعیت</th>
+                        <th>دسته بندی اصلی</th>
                         <th>تعداد محصولات</th>
                         <th>عملیات</th>
                     </tr>
@@ -66,6 +68,10 @@
                     name: 'name'
                 },
                 {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
                     data: 'parent.name',
                     name: 'parent.name',
                     defaultContent: '-',
@@ -74,6 +80,11 @@
                 {
                     data: 'is_active',
                     name: 'is_active',
+                    searchable: false
+                },
+                {
+                    data: 'is_main',
+                    name: 'is_main',
                     searchable: false
                 },
                 {

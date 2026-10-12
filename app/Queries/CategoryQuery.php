@@ -1,15 +1,17 @@
 <?php
 
 namespace App\Queries;
+use App\Enums\CategoryType;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Category;
 
 class CategoryQuery
 {
-    public function get(): Collection
+    public function get(CategoryType $type): Collection
     {
         return Category::query()
             ->activeParents()
+            ->ofType($type)
             ->with('media')
             ->orderBy('sort_order')
             ->get();

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\FaqController;
 
 Route::get('/',[DashboardController::class,'index'])->name('dashboard');
 
@@ -232,3 +233,9 @@ Route::prefix('contacts')->name('contacts.')->group(function (){
     Route::get('/{contactMessage}',[ContactController::class,'edit'])->name('edit');
     Route::put('/{contactMessage}',[ContactController::class,'update'])->name('update');
 });
+
+
+Route::get('faqs/data', [FaqController::class, 'data'])->name('faq.data');
+Route::resource('faqs', FaqController::class)
+    ->except('show')
+    ->names('faq');

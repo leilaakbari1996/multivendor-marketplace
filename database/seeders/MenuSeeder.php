@@ -110,7 +110,7 @@ class MenuSeeder extends Seeder
             parent: $customerService,
             title: 'سؤالات متداول',
             slug: 'faq',
-            url: '#',
+            url: 'faq',
             sortOrder: 1,
         );
 

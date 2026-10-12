@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CategoryType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Pishran\LaravelPersianSlug\HasPersianSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Category extends Model
 {
@@ -23,13 +25,17 @@ class Category extends Model
         'is_active',
         'sort_order',
         'meta_title',
-        'meta_description'
+        'meta_description',
+        'is_main',
+        'type'
     ];
 
     protected function casts(): array
     {
         return [
+            'type'       => CategoryType::class,
             'is_active' => 'boolean',
+            'is_main' => 'boolean',
             'sort_order' => 'integer',
         ];
     }
@@ -47,6 +53,16 @@ class Category extends Model
     }
 
     //region Morphs
+
+    public function faqs() : MorphToMany
+    {
+        return $this->morphedByMany(Faq::class, 'categorizable');
+    }
+
+    public function products(): MorphToMany
+    {
+        return $this->morphedByMany(Product::class, 'categorizable');
+    }
     public function media(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediable')
@@ -71,14 +87,14 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
-
     //endregion
 
     //region Scopes
+
+    public function scopeOfType(Builder $query, CategoryType $type): Builder
+    {
+        return $query->where('type', $type->value);
+    }
     public function scopeActiveParents(Builder $query): Builder
     {
         return $query
@@ -88,8 +104,11 @@ class Category extends Model
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query
-            ->where('is_active', true);
+        return $query->where('is_active', true);
+    }
+    public function scopeMain(Builder $query): Builder
+    {
+        return $query->where('is_main', true);
     }
 
     public function scopeSlug(Builder $query, string $slug): Builder

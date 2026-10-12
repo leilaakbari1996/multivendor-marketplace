@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             ShopBenefitSeeder::class,
             MenuSeeder::class,
-            AddressSeeder::class
+            AddressSeeder::class,
+            FaqSeeder::class
         ]);
     }
 }

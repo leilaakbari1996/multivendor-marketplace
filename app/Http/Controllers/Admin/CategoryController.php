@@ -46,25 +46,34 @@ class CategoryController extends Controller
                     'name',
                     'slug',
                     'parent_id',
+                    'type',        // اضافه شد
                     'is_active',
+                    'is_main',     // برای ستون is_main لازم است
                 ])
-                ->withCount('products')
-                ->with('parent:id,name,slug'),
+                ->withCount(['products', 'faqs'])
+                ->with('parent:id,name,slug')
+                ->when(request('type'), fn ($q, $type) => $q->where('type', $type)),   // فیلتر اختیاری
             actionsView: 'admin.pages.categories.partials._actions',
             extraColumns: [
+                'type' => fn ($row) => e($row->type->label()),
                 'is_active' => fn ($row) => BadgeHelper::booleanButton(
                     value: (bool) $row->is_active,
                     trueLabel: 'فعال',
                     falseLabel: 'غیرفعال',
                 ),
+                'is_main' => fn ($row) => BadgeHelper::booleanButton(
+                    value: (bool) $row->is_main,
+                    trueLabel: 'اصلی',
+                    falseLabel: 'عادی',
+                ),
                 'parent.name' => function ($row) {
-                    if (!$row->parent) {
+                    if (! $row->parent) {
                         return '-';
                     }
 
                     return sprintf(
                         '<a href="%s">%s</a>',
-                        route('panel.category.edit', $row->parent->slug),
+                        route('panel.category.edit', $row->parent),
                         e($row->parent->name)
                     );
                 },
