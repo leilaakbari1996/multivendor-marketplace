@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Actions\Client\Auth\RegisterUserAction;
+use App\Actions\Client\Auth\RegisterAction;
 use App\Http\Requests\Client\Auth\RegisterRequest;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +17,7 @@ class RegisterController
 
     public function store(
         RegisterRequest $request,
-        RegisterUserAction $action,
+        RegisterAction $action,
     ): JsonResponse {
         $user = $action->execute(
             $request->validated()

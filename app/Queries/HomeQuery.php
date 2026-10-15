@@ -3,6 +3,8 @@
 namespace App\Queries;
 
 
+use App\Enums\CategoryType;
+
 class HomeQuery
 {
 
@@ -27,7 +29,7 @@ class HomeQuery
 
     public function categories()
     {
-        return $this->categoryQuery->get();
+        return $this->categoryQuery->get(CategoryType::Product);
     }
 
 
