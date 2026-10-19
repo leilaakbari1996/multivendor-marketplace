@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums;
 
 enum BannerPosition: string
@@ -11,11 +13,22 @@ enum BannerPosition: string
 
     public function label(): string
     {
-        return match ($this) {
-            self::MAIN => 'اسلایدر اصلی',
-            self::SIDE_TOP => 'بنر کناری بالا',
-            self::SIDE_BOTTOM => 'بنر کناری پایین',
-            self::PROMO => 'بنر تبلیغاتی صفحه اصلی',
-        };
+        return __('banner.positions.'.$this->value);
+    }
+
+    /**
+     * Options for select inputs: [value => translated label].
+     *
+     * @return array<string, string>
+     */
+    public static function options(): array
+    {
+        $options = [];
+
+        foreach (self::cases() as $case) {
+            $options[$case->value] = $case->label();
+        }
+
+        return $options;
     }
 }

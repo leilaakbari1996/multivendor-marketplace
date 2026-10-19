@@ -1,144 +1,97 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Coupon\DeleteCouponAction;
 use App\Actions\Admin\Coupon\StoreCouponAction;
 use App\Actions\Admin\Coupon\UpdateCouponAction;
 use App\Constants\AdminView;
+use App\Datatables\Admin\CouponDatatable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Coupon\StoreRequest;
 use App\Http\Requests\Admin\Coupon\UpdateRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Coupon;
-use App\Support\BadgeHelper;
-use App\Support\DateHelper;
-use App\Traits\HasDatatable;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-
-use Illuminate\View\View;
 
 class CouponController extends Controller
 {
-    use HasDatatable;
-
     public function __construct(
         private readonly StoreCouponAction $storeCouponAction,
         private readonly UpdateCouponAction $updateCouponAction,
         private readonly DeleteCouponAction $deleteCouponAction,
-    ) {
-    }
+    ) {}
 
     public function index(): View
     {
-        $title = 'کدهای تخفیف';
+        $this->authorize('viewAny', Coupon::class);
 
-        return view(
-            AdminView::COUPON_INDEX,
-            compact('title')
-        );
+        return view(AdminView::PREFIX . 'coupons.index', [
+            'title' => __('coupon.title'),
+        ]);
     }
 
-    public function data()
+    public function data(CouponDatatable $datatable): JsonResponse
     {
-        return $this->renderDatatable(
-            query: Coupon::query()
-                ->select([
-                    'id',
-                    'code',
-                    'type',
-                    'value',
-                    'usage_limit',
-                    'used_count',
-                    'starts_at',
-                    'expires_at',
-                    'is_active',
-                ]),
-            actionsView: 'admin.pages.coupons.partials._actions',
-            extraColumns: [
-                'type' => fn ($row) => $row->type->label($row->value),
+        $this->authorize('viewAny', Coupon::class);
 
-                'usage' => fn ($row) => $row->usage_limit
-                    ? sprintf(
-                        '%s / %s',
-                        number_format($row->used_count),
-                        number_format($row->usage_limit)
-                    )
-                    : sprintf(
-                        '%s / نامحدود',
-                        number_format($row->used_count)
-                    ),
-
-                'starts_at' => fn ($row) => DateHelper::toJalali(
-                    $row->starts_at
-                ),
-
-                'expires_at' => fn ($row) => DateHelper::toJalali(
-                    $row->expires_at
-                ),
-
-                'is_active' => fn ($row) => BadgeHelper::booleanButton(
-                    value: (bool) $row->is_active,
-                    trueLabel: 'فعال',
-                    falseLabel: 'غیرفعال',
-                ),
-            ],
-        );
+        return $datatable->toJson();
     }
 
     public function create(): View
     {
-        $title = 'ایجاد کد تخفیف';
+        $this->authorize('create', Coupon::class);
 
-        return view(
-            AdminView::COUPON_CREATE,
-            compact('title')
-        );
+        return view(AdminView::PREFIX . 'coupons.create', [
+            'title' => __('coupon.create'),
+        ]);
     }
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $this->storeCouponAction->execute(
-            $request->validated()
-        );
+        $this->authorize('create', Coupon::class);
 
-        return redirect()
-            ->route(AdminView::PERFIX_ROUTE . 'coupon.index')
-            ->with('success', 'کد تخفیف با موفقیت ایجاد شد.');
+        $this->storeCouponAction->execute($request->validated());
+
+        return to_route(AdminView::PREFIX_ROUTE . 'coupon.index')
+            ->with('success', __('coupon.created'));
     }
 
     public function edit(Coupon $coupon): View
     {
-        $title = 'ویرایش کد تخفیف';
+        $this->authorize('update', $coupon);
 
-        return view(
-            AdminView::COUPON_EDIT,
-            compact(
-                'title',
-                'coupon'
-            )
-        );
+        return view(AdminView::PREFIX . 'coupons.edit', [
+            'title' => __('coupon.edit'),
+            'coupon' => $coupon,
+        ]);
     }
 
     public function update(
         UpdateRequest $request,
-        Coupon $coupon
+        Coupon $coupon,
     ): RedirectResponse {
+        $this->authorize('update', $coupon);
+
         $this->updateCouponAction->execute(
-            $coupon,
-            $request->validated()
+            coupon: $coupon,
+            data: $request->validated(),
         );
 
-        return redirect()
-            ->route(AdminView::PERFIX_ROUTE . 'coupon.index')
-            ->with('success', 'کد تخفیف با موفقیت ویرایش شد.');
+        return to_route(AdminView::PREFIX_ROUTE . 'coupon.index')
+            ->with('success', __('coupon.updated'));
     }
 
-    public function destroy(Coupon $coupon)
+    public function destroy(Coupon $coupon): JsonResponse
     {
+        $this->authorize('delete', $coupon);
+
         $this->deleteCouponAction->execute($coupon);
 
-        return response()->json([
-            'message' => 'کد تخفیف با موفقیت حذف شد.',
-        ]);
+        return ApiResponse::success(__('coupon.deleted'));
     }
 }

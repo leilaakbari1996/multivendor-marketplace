@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Exceptions\Address\AddressLimitExceededException;
 use App\Http\Responses\ApiResponse;
+use App\Http\Middleware\EnsureUserHasRole;
+use App\Enums\UserType;
+use App\Exceptions\Media\InvalidImageException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,16 +18,23 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            Route::middleware('web')
+            Route::middleware([
+                'web',
+                'role:'.UserType::ADMIN->value.','.UserType::VENDOR->value,
+            ])
                 ->prefix('panel')
                 ->name('panel.')
                 ->group(base_path('routes/admin.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'role' => EnsureUserHasRole::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->dontReport(InvalidImageException::class);
+
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );

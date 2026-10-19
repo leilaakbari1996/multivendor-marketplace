@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Actions\Admin\Category;
 
 use App\Actions\Admin\Media\StoreMediaAction;
@@ -6,27 +9,26 @@ use App\Actions\Admin\Tag\SyncTagsAction;
 use App\Enums\MediaCollection;
 use App\Models\Category;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
-class StoreCategoryAction
+final class StoreCategoryAction
 {
     public function __construct(
         private readonly StoreMediaAction $storeMediaAction,
         private readonly SyncTagsAction $syncTagsAction,
-    ) {
-    }
+    ) {}
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function execute(array $data): Category
     {
-        return DB::transaction(function () use ($data) {
-            $image = $data['image'] ?? null;
-            $tags = $data['tags'] ?? [];
+        $image = Arr::pull($data, 'image');
+        $tags = Arr::pull($data, 'tags', []);
 
-            unset($data['image'], $data['tags']);
-
+        return DB::transaction(function () use ($data, $image, $tags): Category {
             $category = Category::create($data);
-
-
 
             if ($image instanceof UploadedFile) {
                 $this->storeMediaAction->execute(
@@ -37,7 +39,7 @@ class StoreCategoryAction
                 );
             }
 
-            if ($tags) {
+            if ($tags !== []) {
                 $this->syncTagsAction->execute(
                     model: $category,
                     tags: $tags,

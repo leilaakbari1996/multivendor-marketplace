@@ -10,8 +10,9 @@ use App\Actions\Admin\Banner\UpdateBannerAction;
 use App\Constants\AdminView;
 use App\Datatables\Admin\BannerDatatable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Banner\StoreRequest;
-use App\Http\Requests\Admin\Banner\UpdateRequest;
+use App\Http\Requests\Admin\Banner\StoreBannerRequest;
+use App\Http\Requests\Admin\Banner\UpdateBannerRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Banner;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -29,7 +30,7 @@ class BannerController extends Controller
     {
         $this->authorize('viewAny', Banner::class);
 
-        return view(AdminView::BANNER_INDEX, [
+        return view(AdminView::PREFIX . 'banners.index', [
             'title' => __('banner.title'),
         ]);
     }
@@ -45,18 +46,18 @@ class BannerController extends Controller
     {
         $this->authorize('create', Banner::class);
 
-        return view(AdminView::BANNER_CREATE, [
+        return view(AdminView::PREFIX . 'banners.create', [
             'title' => __('banner.create'),
         ]);
     }
 
-    public function store(StoreRequest $request): RedirectResponse
+    public function store(StoreBannerRequest $request): RedirectResponse
     {
         $this->authorize('create', Banner::class);
 
         $this->storeBannerAction->execute($request->validated());
 
-        return to_route('admin.banner.index')
+        return to_route(AdminView::PREFIX_ROUTE . 'banner.index')
             ->with('success', __('banner.created'));
     }
 
@@ -64,13 +65,13 @@ class BannerController extends Controller
     {
         $this->authorize('update', $banner);
 
-        return view(AdminView::BANNER_EDIT, [
+        return view(AdminView::PREFIX . 'banners.edit', [
             'title' => __('banner.edit'),
             'banner' => $banner,
         ]);
     }
 
-    public function update(UpdateRequest $request, Banner $banner): RedirectResponse
+    public function update(UpdateBannerRequest $request, Banner $banner): RedirectResponse
     {
         $this->authorize('update', $banner);
 
@@ -79,7 +80,7 @@ class BannerController extends Controller
             data: $request->validated(),
         );
 
-        return to_route('admin.banner.index')
+        return to_route(AdminView::PREFIX_ROUTE . 'banner.index')
             ->with('success', __('banner.updated'));
     }
 
@@ -89,8 +90,6 @@ class BannerController extends Controller
 
         $this->deleteBannerAction->execute($banner);
 
-        return response()->json([
-            'message' => __('banner.deleted'),
-        ]);
+        return ApiResponse::success(__('banner.deleted'));
     }
 }

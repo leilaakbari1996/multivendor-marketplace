@@ -1,23 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Contracts\HasMedia;
 use App\Enums\MediaCollection;
 use App\Enums\PostStatus;
-use Illuminate\Database\Eloquent\Builder;
+use App\Traits\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Pishran\LaravelPersianSlug\HasPersianSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Stevebauman\Purify\Facades\Purify;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
-    use SoftDeletes, HasPersianSlug;
+    /** @use HasFactory<\Database\Factories\PostFactory> */
+    use HasFactory;
+    use HasPersianSlug;
+    use InteractsWithMedia;
+    use SoftDeletes;
 
     protected $fillable = [
         'author_id',
@@ -46,20 +54,14 @@ class Post extends Model
             ->saveSlugsTo('slug');
     }
 
-    //region Relationships
+    // Relationships
 
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
-    //endregion
 
-    //region Morphs
-
-    public function media(): MorphMany
-    {
-        return $this->morphMany(Media::class, 'mediable');
-    }
+    // Morphs
 
     public function likes(): MorphMany
     {
@@ -72,17 +74,24 @@ class Post extends Model
             ->where('collection', MediaCollection::IMAGE);
     }
 
-    //endregion
+    // Scopes
 
-    //region Scopes
-
+    /**
+     * @param Builder<Post> $query
+     * @return Builder<Post>
+     */
     public function scopeLikedBy(Builder $query, int $userId): Builder
     {
-        return $query->whereHas('likes', function (Builder $query) use ($userId) {
-            $query->where('user_id', $userId);
-        });
+        return $query->whereHas(
+            'likes',
+            fn (Builder $query) => $query->where('user_id', $userId),
+        );
     }
 
+    /**
+     * @param Builder<Post> $query
+     * @return Builder<Post>
+     */
     public function scopePublished(Builder $query): Builder
     {
         return $query
@@ -91,27 +100,30 @@ class Post extends Model
             ->where('published_at', '<=', now());
     }
 
+    /**
+     * @param Builder<Post> $query
+     * @return Builder<Post>
+     */
     public function scopeFeatured(Builder $query): Builder
     {
-        return $query
-            ->where('is_featured', true);
+        return $query->where('is_featured', true);
     }
 
+    /**
+     * @param Builder<Post> $query
+     * @return Builder<Post>
+     */
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('title', 'like', "%{$term}%");
     }
 
-    //endregion
-
-    //region Attributes
+    // Attributes
 
     protected function content(): Attribute
     {
-        return Attribute::set(fn (?string $value) => Purify::clean($value ?? ''));
+        return Attribute::set(
+            fn (?string $value): string => Purify::clean($value ?? ''),
+        );
     }
-
-    //endregion
-
 }
-

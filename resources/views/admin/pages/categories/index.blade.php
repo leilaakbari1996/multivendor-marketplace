@@ -1,3 +1,5 @@
+@use('App\Constants\AdminView')
+
 @extends('admin.layouts.app')
 
 @push('styles')
@@ -23,11 +25,11 @@
     <x-admin.breadcrumb
         :items="[
             [
-                'title' => 'دسته‌بندی‌ها',
-                'url' => route('panel.category.index'),
+                'title' => __('category.title'),
+                'url' => route(AdminView::PREFIX_ROUTE . 'category.index'),
             ],
         ]"
-        current="لیست دسته‌بندی‌ها"
+        :current="__('category.list')"
     />
 
     <div class="row layout-top-spacing">
@@ -36,17 +38,17 @@
                 <table
                     id="list"
                     class="table table-hover"
-                    data-ajax-url="{{ route('panel.category.data') }}"
+                    data-ajax-url="{{ route(AdminView::PREFIX_ROUTE . 'category.data') }}"
                 >
                     <thead>
                     <tr>
-                        <th>عنوان</th>
-                        <th>نوع دسته‌بندی</th>
-                        <th>دسته‌بندی والد</th>
-                        <th>وضعیت</th>
-                        <th>دسته بندی اصلی</th>
-                        <th>تعداد محصولات</th>
-                        <th>عملیات</th>
+                        <th>{{ __('category.columns.name') }}</th>
+                        <th>{{ __('category.columns.type') }}</th>
+                        <th>{{ __('category.columns.parent') }}</th>
+                        <th>{{ __('category.columns.status') }}</th>
+                        <th>{{ __('category.columns.is_main') }}</th>
+                        <th>{{ __('category.columns.products_count') }}</th>
+                        <th>{{ __('category.columns.actions') }}</th>
                     </tr>
                     </thead>
                 </table>
@@ -75,7 +77,8 @@
                     data: 'parent.name',
                     name: 'parent.name',
                     defaultContent: '-',
-                    searchable: false
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     data: 'is_active',

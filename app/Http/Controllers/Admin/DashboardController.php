@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $title = AdminView::DASHBOARD_TITLE;
-        return view(AdminView::DASHBOARD_INDEX, compact('title'));
+        $title = __('sidebar.dashboard');
+        return view(AdminView::PREFIX.'dashboard.index', compact('title'));
     }
 }

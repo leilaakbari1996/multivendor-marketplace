@@ -10,6 +10,18 @@ return [
 
     'numeric' => ':attribute باید یک عدد باشد.',
 
+    'url' => ':attribute باید یک آدرس معتبر (با http یا https) باشد.',
+
+    'enum' => ':attribute انتخاب‌شده معتبر نیست.',
+
+    'file' => ':attribute باید یک فایل باشد.',
+
+    'uploaded' => 'بارگذاری :attribute ناموفق بود. حجم فایل را بررسی کنید.',
+
+    'extensions' => ':attribute باید یکی از این پسوندها را داشته باشد: :values.',
+
+    'mimetypes' => ':attribute باید از نوع: :values باشد.',
+
     'min' => [
         'numeric' => ':attribute باید حداقل :min باشد.',
         'string' => ':attribute باید حداقل :min کاراکتر باشد.',

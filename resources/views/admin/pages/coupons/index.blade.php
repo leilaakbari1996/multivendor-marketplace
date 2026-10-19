@@ -1,3 +1,5 @@
+@use('App\Constants\AdminView')
+
 @extends('admin.layouts.app')
 
 @push('styles')
@@ -23,39 +25,40 @@
 @section('content')
 
     <x-admin.breadcrumb
-        :items="[]"
-        current="لیست کدهای تخفیف"
+        :items="[
+            [
+                'title' => __('coupon.title'),
+                'url' => route(AdminView::PREFIX_ROUTE . 'coupon.index'),
+            ],
+        ]"
+        :current="__('coupon.list')"
     />
 
     <div class="row layout-top-spacing">
-
         <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
-
             <div class="widget-content widget-content-area br-8">
 
                 <table
                     id="list"
                     class="table table-hover"
-                    data-ajax-url="{{ route('panel.coupon.data') }}"
+                    data-ajax-url="{{ route(AdminView::PREFIX_ROUTE . 'coupon.data') }}"
                 >
                     <thead>
                     <tr>
-                        <th>کد تخفیف</th>
-                        <th>نوع تخفیف</th>
-                        <th>مقدار تخفیف</th>
-                        <th>محدودیت استفاده</th>
-                        <th>شروع اعتبار</th>
-                        <th>پایان اعتبار</th>
-                        <th>وضعیت</th>
-                        <th>عملیات</th>
+                        <th>{{ __('coupon.columns.code') }}</th>
+                        <th>{{ __('coupon.columns.type') }}</th>
+                        <th>{{ __('coupon.columns.value') }}</th>
+                        <th>{{ __('coupon.columns.usage') }}</th>
+                        <th>{{ __('coupon.columns.starts_at') }}</th>
+                        <th>{{ __('coupon.columns.expires_at') }}</th>
+                        <th>{{ __('coupon.columns.status') }}</th>
+                        <th>{{ __('coupon.columns.actions') }}</th>
                     </tr>
                     </thead>
                 </table>
 
             </div>
-
         </div>
-
     </div>
 
 @endsection
@@ -63,7 +66,6 @@
 @push('scripts')
 
     <script src="{{ asset('admin/src/plugins/src/global/vendors.min.js') }}"></script>
-
     <script src="{{ asset('admin/src/assets/js/custom.js') }}"></script>
 
     <script>

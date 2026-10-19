@@ -1,19 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Category\DeleteCategoryAction;
 use App\Actions\Admin\Category\StoreCategoryAction;
 use App\Actions\Admin\Category\UpdateCategoryAction;
 use App\Constants\AdminView;
+use App\Datatables\Admin\CategoryDatatable;
 use App\Enums\MediaCollection;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Category\StoreRequest;
+use App\Http\Requests\Admin\Category\StoreCategoryRequest;
+use App\Http\Requests\Admin\Category\UpdateCategoryRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Category;
 use App\Services\LocalFileUploader;
-use App\Support\BadgeHelper;
 use App\Traits\HasDatatable;
-
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class CategoryController extends Controller
 {
@@ -24,135 +30,103 @@ class CategoryController extends Controller
         private readonly UpdateCategoryAction $updateCategoryAction,
         private readonly DeleteCategoryAction $deleteCategoryAction,
         private readonly LocalFileUploader $fileUploader,
-    ) {
+    ) {}
+
+    public function index(): View
+    {
+        $this->authorize('viewAny', Category::class);
+
+        return view(AdminView::PREFIX . 'categories.index', [
+            'title' => __('category.title'),
+        ]);
     }
 
-    public function index()
+    public function data(CategoryDatatable $datatable): JsonResponse
     {
-        $title = 'دسته‌بندی‌ها';
+        $this->authorize('viewAny', Category::class);
 
-        return view(
-            AdminView::CATEGORY_INDEX,
-            compact('title')
-        );
+        return $datatable->toJson();
     }
 
-    public function data()
+    public function create(): View
     {
-        return $this->renderDatatable(
-            query: Category::query()
-                ->select([
-                    'id',
-                    'name',
-                    'slug',
-                    'parent_id',
-                    'type',        // اضافه شد
-                    'is_active',
-                    'is_main',     // برای ستون is_main لازم است
-                ])
-                ->withCount(['products', 'faqs'])
-                ->with('parent:id,name,slug')
-                ->when(request('type'), fn ($q, $type) => $q->where('type', $type)),   // فیلتر اختیاری
-            actionsView: 'admin.pages.categories.partials._actions',
-            extraColumns: [
-                'type' => fn ($row) => e($row->type->label()),
-                'is_active' => fn ($row) => BadgeHelper::booleanButton(
-                    value: (bool) $row->is_active,
-                    trueLabel: 'فعال',
-                    falseLabel: 'غیرفعال',
-                ),
-                'is_main' => fn ($row) => BadgeHelper::booleanButton(
-                    value: (bool) $row->is_main,
-                    trueLabel: 'اصلی',
-                    falseLabel: 'عادی',
-                ),
-                'parent.name' => function ($row) {
-                    if (! $row->parent) {
-                        return '-';
-                    }
-
-                    return sprintf(
-                        '<a href="%s">%s</a>',
-                        route('panel.category.edit', $row->parent),
-                        e($row->parent->name)
-                    );
-                },
-            ],
-        );
-    }
-
-    public function create()
-    {
-        $title = 'دسته‌بندی‌ها';
+        $this->authorize('create', Category::class);
 
         $categories = Category::query()
             ->activeParents()
             ->get(['id', 'name']);
 
-        return view(AdminView::CATEGORY_CREATE,compact(
-            'title',
-            'categories'
-        ));
+        return view(AdminView::PREFIX . 'categories.create', [
+            'title' => __('category.create'),
+            'categories' => $categories,
+        ]);
     }
 
-    public function store(StoreRequest $request)
+    public function store(
+        StoreCategoryRequest $request
+    ): RedirectResponse
     {
+        $this->authorize('create', Category::class);
+
         $this->storeCategoryAction->execute(
-            $request->validated()
+            $request->validated(),
         );
 
-        return redirect()
-            ->route('panel.category.index')
-            ->with('success', 'دسته بندی با موفقیت ایجاد شد.');
+        return to_route(AdminView::PREFIX_ROUTE . 'category.index')
+            ->with('success', __('category.created'));
     }
 
-    public function edit(Category $category)
+    public function edit(
+        Category $category
+    ): View
     {
+        $this->authorize('update', $category);
         $categories = Category::query()
             ->activeParents()
             ->whereKeyNot($category->id)
             ->get(['id', 'name']);
 
-        $title = 'ویرایش دسته بندی';
         $category->load('media', 'tags');
-        $imageUrl = null;
 
+        $image = $category->media
+            ->firstWhere('collection', MediaCollection::IMAGE);
 
-        if (!is_null($category->media))
-        {
-            $image = $category->media
-                ->where('collection', MediaCollection::IMAGE)
-                ->first();
+        $imageUrl = $image
+            ? $this->fileUploader->url(
+                path: $image->file_path,
+                disk: $image->disk,
+            )
+            : null;
 
-            $imageUrl = $image
-                ? $this->fileUploader->url(
-                    path: $image->file_path,
-                    disk: $image->disk,
-                )
-                : null;
-        }
-
-        return view(AdminView::CATEGORY_EDIT,compact('title','category','imageUrl','categories'));
+        return view(AdminView::PREFIX . 'categories.edit', [
+            'title' => __('category.edit'),
+            'category' => $category,
+            'imageUrl' => $imageUrl,
+            'categories' => $categories,
+        ]);
     }
 
-    public function update(StoreRequest $request, Category $category)
-    {
+    public function update(
+        UpdateCategoryRequest $request,
+        Category $category,
+    ): RedirectResponse {
+        $this->authorize('update', $category);
+
         $this->updateCategoryAction->execute(
             $category,
-            $request->validated()
+            $request->validated(),
         );
 
-        return redirect()
-            ->route('panel.category.index')
-            ->with('success', 'دسته بندی با موفقیت ویرایش شد.');
+        return to_route(AdminView::PREFIX_ROUTE . 'category.index')
+            ->with('success', __('category.updated'));
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category): JsonResponse
     {
+        $this->authorize('delete', $category);
+
         $this->deleteCategoryAction->execute($category);
 
-        return response()->json([
-            'message' => 'دسته بندی با موفقیت حذف شد.',
-        ]);
+        return ApiResponse::success(__('category.deleted'));
     }
 }

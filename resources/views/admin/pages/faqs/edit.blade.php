@@ -1,6 +1,4 @@
-@php
-    use App\Constants\AdminView;
-@endphp
+@use('App\Constants\AdminView')
 
 @extends('admin.layouts.app')
 
@@ -21,78 +19,64 @@
 @endpush
 
 @section('content')
-
     <x-admin.breadcrumb
         :items="[
             [
-                'title' => 'سوالات متداول',
-                'url' => route(AdminView::PERFIX_ROUTE . 'faq.index'),
+                'title' => __('faq.title'),
+                'url' => route(AdminView::PREFIX_ROUTE . 'faq.index'),
             ],
         ]"
-        current="ویرایش سوال متداول"
+        :current="__('faq.edit')"
     />
 
     <form
-        action="{{ route(AdminView::PERFIX_ROUTE . 'faq.update', $faq) }}"
-        method="post"
+        action="{{ route(AdminView::PREFIX_ROUTE . 'faq.update', $faq) }}"
+        method="POST"
     >
         @csrf
         @method('PUT')
 
         <div class="row layout-top-spacing">
-
-            {{-- Main content --}}
             <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-
                 <div class="widget-content widget-content-area blog-create-section">
-
                     <div class="row mb-4">
-
                         <div class="col-12">
                             <x-admin.forms.input
                                 name="question"
                                 id="faq-question"
-                                label="سوال"
-                                placeholder="متن سوال"
-                                :value="$faq->question"
+                                :label="__('faq.fields.question')"
+                                :placeholder="__('faq.placeholders.question')"
+                                :value="old('question', $faq->question)"
                             />
                         </div>
-
                     </div>
 
                     <div class="row mb-4">
-
                         <div class="col-12">
                             <x-admin.forms.textarea
                                 name="answer"
-                                label="پاسخ"
-                                placeholder="متن پاسخ"
+                                :label="__('faq.fields.answer')"
+                                :placeholder="__('faq.placeholders.answer')"
                                 rows="8"
-                                :value="$faq->answer"
+                                :value="old('answer', $faq->answer)"
                             />
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
-            {{-- Sidebar --}}
             <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
-
                 <div class="widget-content widget-content-area blog-create-section">
-
-                    {{-- Categories --}}
                     <div class="col-xxl-12 col-md-12 mb-4">
-
-                        <label for="faq-categories" class="form-label">دسته بندی</label>
+                        <label for="faq-categories" class="form-label">
+                            {{ __('faq.fields.categories') }}
+                        </label>
 
                         <select
                             name="categories[]"
                             id="faq-categories"
                             multiple
-                            placeholder="انتخاب دسته بندی"
+                            placeholder="{{ __('faq.placeholders.categories') }}"
                         >
                             @foreach ($categories as $category)
                                 <option
@@ -111,46 +95,36 @@
                         @error('categories.*')
                         <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
-
                     </div>
 
-                    {{-- Icon --}}
                     <div class="col-xxl-12 col-md-12 mb-4">
-
                         <x-admin.forms.input
                             name="icon"
                             id="faq-icon"
-                            label="آیکن"
-                            placeholder="bi-question-circle"
+                            :label="__('faq.fields.icon')"
+                            :placeholder="__('faq.placeholders.icon')"
                             :value="old('icon', $faq->icon)"
                         />
 
                         <small class="text-muted">
-                            نام کلاس Bootstrap Icons، مثلاً bi-truck
+                            {{ __('faq.help.icon') }}
                         </small>
-
                     </div>
 
-                    {{-- Sort order --}}
                     <div class="col-xxl-12 col-md-12 mb-4">
-
                         <x-admin.forms.input
                             name="sort_order"
                             type="number"
                             id="faq-sort-order"
-                            label="ترتیب نمایش"
-                            placeholder="ترتیب نمایش"
+                            :label="__('faq.fields.sort_order')"
+                            :placeholder="__('faq.placeholders.sort_order')"
                             min="0"
-                            :value="$faq->sort_order"
+                            :value="old('sort_order', $faq->sort_order)"
                         />
-
                     </div>
 
-                    {{-- Active --}}
                     <div class="col-xxl-12 col-md-12 mb-4">
-
                         <div class="form-check form-switch">
-
                             <input
                                 type="hidden"
                                 name="is_active"
@@ -163,43 +137,33 @@
                                 name="is_active"
                                 id="faq-is-active"
                                 value="1"
-                                @checked(old('is_active', $faq->is_active))
+                                @checked((bool) old('is_active', $faq->is_active))
                             >
 
                             <label
                                 class="form-check-label"
                                 for="faq-is-active"
                             >
-                                فعال
+                                {{ __('faq.fields.is_active') }}
                             </label>
-
                         </div>
-
                     </div>
 
-                    {{-- Submit --}}
                     <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
-
                         <x-admin.forms.button
                             type="submit"
                             class="btn-success w-100"
                         >
-                            بروزرسانی سوال
+                            {{ __('faq.actions.update') }}
                         </x-admin.forms.button>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     </form>
-
 @endsection
 
 @push('scripts')
-
     <script src="{{ asset('admin/src/plugins/src/tomSelect/tom-select.base.js') }}"></script>
 
     @include('admin.assets.create_js')
@@ -210,5 +174,4 @@
             maxOptions: null,
         });
     </script>
-
 @endpush

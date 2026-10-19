@@ -1,7 +1,5 @@
-@php
-    use App\Constants\AdminView;
-    use App\Enums\BannerPosition;
-@endphp
+@use('App\Constants\AdminView')
+@use('App\Enums\BannerPosition')
 
 @extends('admin.layouts.app')
 
@@ -26,34 +24,31 @@
     <x-admin.breadcrumb
         :items="[
             [
-                'title' => 'بنرها',
-                'url' => route(AdminView::PERFIX_ROUTE . 'banner.index'),
+                'title' => __('banner.title'),
+                'url' => route(AdminView::PREFIX_ROUTE . 'banner.index'),
             ],
         ]"
-        current="ایجاد بنر"
+        :current="__('banner.create')"
     />
 
     <form
-        action="{{ route(AdminView::PERFIX_ROUTE . 'banner.store') }}"
+        action="{{ route(AdminView::PREFIX_ROUTE . 'banner.store') }}"
         method="post"
         enctype="multipart/form-data"
     >
         @csrf
 
         <div class="row layout-top-spacing">
-
-            {{-- Main Content --}}
             <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12">
-
                 <div class="widget-content widget-content-area blog-create-section">
-
                     <div class="row mb-4">
                         <div class="col-sm-12">
                             <x-admin.forms.input
                                 name="title"
-                                id="title"
-                                label="عنوان"
-                                placeholder="عنوان بنر"
+                                id="banner-title"
+                                :label="__('banner.fields.title')"
+                                :placeholder="__('banner.placeholders.title')"
+                                :value="old('title')"
                             />
                         </div>
                     </div>
@@ -62,9 +57,10 @@
                         <div class="col-sm-12">
                             <x-admin.forms.input
                                 name="subtitle"
-                                id="subtitle"
-                                label="عنوان فرعی"
-                                placeholder="عنوان فرعی"
+                                id="banner-subtitle"
+                                :label="__('banner.fields.subtitle')"
+                                :placeholder="__('banner.placeholders.subtitle')"
+                                :value="old('subtitle')"
                             />
                         </div>
                     </div>
@@ -73,50 +69,50 @@
                         <div class="col-sm-12">
                             <x-admin.forms.textarea
                                 name="description"
-                                label="توضیحات"
-                                placeholder="توضیحات بنر"
+                                :label="__('banner.fields.description')"
+                                :placeholder="__('banner.placeholders.description')"
+                                :value="old('description')"
                             />
                         </div>
                     </div>
-
                 </div>
-
             </div>
 
-            {{-- Sidebar --}}
             <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-xxl-0 mt-4">
-
                 <div class="widget-content widget-content-area blog-create-section">
-
                     <div class="row">
-
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.switch
                                 name="is_active"
-                                label="فعال"
-                                :checked="true"
+                                id="banner-is-active"
+                                :label="__('common.active')"
+                                :checked="(bool) old('is_active', true)"
+                                value="1"
                             />
                         </div>
 
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.input
                                 name="url"
-                                id="url"
-                                label="آدرس"
-                                placeholder="https://example.com"
+                                id="banner-url"
+                                type="url"
+                                :label="__('banner.fields.url')"
+                                :placeholder="__('banner.placeholders.url')"
+                                :value="old('url')"
                             />
                         </div>
 
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.tom-select
                                 name="position"
+                                :label="__('banner.fields.position')"
                                 :options="collect(BannerPosition::cases())
-                                    ->mapWithKeys(fn ($position) => [
-                                        $position->value => $position->label()
+                                    ->mapWithKeys(fn (BannerPosition $position) => [
+                                        $position->value => $position->label(),
                                     ])
                                     ->toArray()"
                                 :value="old('position')"
-                                placeholder="انتخاب موقعیت بنر"
+                                :placeholder="__('banner.placeholders.position')"
                             />
                         </div>
 
@@ -124,21 +120,20 @@
                             <x-admin.forms.input
                                 name="sort_order"
                                 type="number"
-                                id="sort_order"
-                                label="ترتیب نمایش"
-                                placeholder="ترتیب نمایش"
+                                id="banner-sort-order"
+                                :label="__('banner.fields.sort_order')"
+                                :placeholder="__('banner.placeholders.sort_order')"
                                 :value="old('sort_order', 0)"
+                                min="0"
                             />
                         </div>
 
                         <div class="col-xxl-12 mb-4">
-
                             <x-admin.forms.file-upload
                                 name="image"
                                 id="banner-image"
-                                label="تصویر بنر"
+                                :label="__('banner.fields.image')"
                             />
-
                         </div>
 
                         <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
@@ -146,25 +141,19 @@
                                 type="submit"
                                 class="btn-success w-100"
                             >
-                                ایجاد بنر
+                                {{ __('banner.create') }}
                             </x-admin.forms.button>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     </form>
 
 @endsection
 
 @push('scripts')
-
     <script src="{{ asset('admin/src/plugins/src/tomSelect/tom-select.base.js') }}"></script>
 
     @include('admin.assets.create_js')
-
 @endpush

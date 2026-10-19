@@ -1,30 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support;
 
-use BackedEnum;
+use App\Contracts\HasBadge;
 
-class BadgeHelper
+/**
+ * Builds the HTML of status badges used in datatables.
+ * The result is HTML, so the datatable column must be listed in rawColumns().
+ */
+final class BadgeHelper
 {
-    public static function button(?BackedEnum $status): string
+    /**
+     * Badge for an enum that implements HasBadge.
+     */
+    public static function button(?HasBadge $status): string
     {
-        if (!$status) {
+        if ($status === null) {
             return '-';
         }
 
-        return sprintf(
-            '<button type="button" class="btn btn-sm btn-light-%s">%s</button>',
-            $status->color(),
-            e($status->label())
+        return self::render($status->color(), $status->label());
+    }
+
+    /**
+     * Green/red badge for a boolean value.
+     */
+    public static function booleanButton(?bool $value, string $trueLabel, string $falseLabel): string
+    {
+        return self::render(
+            $value ? 'success' : 'danger',
+            $value ? $trueLabel : $falseLabel,
         );
     }
 
-    public static function booleanButton(?bool $value, string $trueLabel, string $falseLabel): string
+    private static function render(string $color, string $label): string
     {
+        // A badge is not interactive, so a <span> is used instead of a <button>.
+        // Both values are escaped, so the output is safe to print raw.
         return sprintf(
-            '<button type="button" class="btn btn-sm btn-light-%s">%s</button>',
-            $value ? 'success' : 'danger',
-            e($value ? $trueLabel : $falseLabel)
+            '<span class="badge badge-light-%s">%s</span>',
+            e($color),
+            e($label),
         );
     }
 }

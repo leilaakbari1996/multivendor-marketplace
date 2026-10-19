@@ -1,21 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
+use App\Contracts\HasMedia;
 use App\Enums\CategoryType;
+use App\Enums\MediaCollection;
+use App\Traits\InteractsWithMedia;
+use App\Traits\PrunesSoftDeleted;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
 use Pishran\LaravelPersianSlug\HasPersianSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class Category extends Model
+class Category extends Model implements HasMedia
 {
-    use HasPersianSlug, SoftDeletes;
+    /** @use HasFactory<\Database\Factories\CategoryFactory> */
+    use HasFactory;
+    use HasPersianSlug;
+    use InteractsWithMedia;
+    use PrunesSoftDeleted;
+    use SoftDeletes;
 
     protected $fillable = [
         'parent_id',
@@ -27,13 +39,13 @@ class Category extends Model
         'meta_title',
         'meta_description',
         'is_main',
-        'type'
+        'type',
     ];
 
     protected function casts(): array
     {
         return [
-            'type'       => CategoryType::class,
+            'type' => CategoryType::class,
             'is_active' => 'boolean',
             'is_main' => 'boolean',
             'sort_order' => 'integer',
@@ -44,17 +56,50 @@ class Category extends Model
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+            ->saveSlugsTo('slug')
+            // Renaming a category must not change its URL (SEO, bookmarks).
+            ->doNotGenerateSlugsOnUpdate();
     }
 
-    public function getRouteKeyName(): string
+    /**
+     * Only categories that no other category depends on are pruned.
+     * Children point to their parent, so deleting the parent would break them.
+     *
+     * @return Builder<Category>
+     */
+    public function prunable(): Builder
     {
-        return 'id';
+        return static::onlyTrashed()
+            ->where($this->getQualifiedDeletedAtColumn(), '<=', now()->subDays($this->pruneAfterDays()))
+            ->whereDoesntHave('children');
     }
 
-    //region Morphs
+    /**
+     * Runs right before a pruned category is deleted for good.
+     * Pivot rows have no foreign key cascade, so remove them here.
+     */
+    protected function pruning(): void
+    {
+        $this->faqs()->detach();
+        $this->products()->detach();
+        $this->tags()->detach();
+    }
 
-    public function faqs() : MorphToMany
+    // Relationships
+
+    /**
+     * Convenience relation for the single category image.
+     * The generic media() relation comes from InteractsWithMedia.
+     *
+     * @return MorphOne<Media, $this>
+     */
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'mediable')
+            ->where('collection', MediaCollection::IMAGE->value);
+    }
+
+    public function faqs(): MorphToMany
     {
         return $this->morphedByMany(Faq::class, 'categorizable');
     }
@@ -63,19 +108,11 @@ class Category extends Model
     {
         return $this->morphedByMany(Product::class, 'categorizable');
     }
-    public function media(): MorphOne
-    {
-        return $this->morphOne(Media::class, 'mediable')
-            ->where('collection', 'image');
-    }
 
-    public function tags()
+    public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
-    //endregion
-
-    //region Relationships
 
     public function parent(): BelongsTo
     {
@@ -87,14 +124,21 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    //endregion
+    // Scopes
 
-    //region Scopes
-
+    /**
+     * @param  Builder<Category>  $query
+     * @return Builder<Category>
+     */
     public function scopeOfType(Builder $query, CategoryType $type): Builder
     {
-        return $query->where('type', $type->value);
+        return $query->where('type', $type);
     }
+
+    /**
+     * @param  Builder<Category>  $query
+     * @return Builder<Category>
+     */
     public function scopeActiveParents(Builder $query): Builder
     {
         return $query
@@ -102,22 +146,30 @@ class Category extends Model
             ->active();
     }
 
+    /**
+     * @param  Builder<Category>  $query
+     * @return Builder<Category>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * @param  Builder<Category>  $query
+     * @return Builder<Category>
+     */
     public function scopeMain(Builder $query): Builder
     {
         return $query->where('is_main', true);
     }
 
+    /**
+     * @param  Builder<Category>  $query
+     * @return Builder<Category>
+     */
     public function scopeSlug(Builder $query, string $slug): Builder
     {
-        return $query
-            ->where('slug', $slug)
-            ;
+        return $query->where('slug', $slug);
     }
-    //endregion
-
-
 }

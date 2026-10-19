@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Faq extends Model
 {
@@ -12,31 +15,43 @@ class Faq extends Model
         'answer',
         'icon',
         'sort_order',
-        'is_active'
+        'is_active',
     ];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected function casts(): array
+    {
+        return [
+            'sort_order' => 'integer',
+            'is_active' => 'boolean',
+        ];
+    }
 
+    // Relationships
 
-    //region Morphs
-
-    public function categories()
+    public function categories(): MorphToMany
     {
         return $this->morphToMany(Category::class, 'categorizable');
     }
 
-    //endregion
+    // Scopes
 
-    //region Scopes
-    public function scopeActive(Builder $q): Builder
+    /**
+     * @param Builder<Faq> $query
+     * @return Builder<Faq>
+     */
+    public function scopeActive(Builder $query): Builder
     {
-        return $q->where('is_active', true);
+        return $query->where('is_active', true);
     }
 
-    public function scopeOrdered(Builder $q): Builder
+    /**
+     * @param Builder<Faq> $query
+     * @return Builder<Faq>
+     */
+    public function scopeOrdered(Builder $query): Builder
     {
-        return $q->orderBy('sort_order')->orderBy('id');
+        return $query
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
-
-    //endregion
 }

@@ -26,12 +26,4 @@ class LoginRequest extends FormRequest
         ];
     }
 
-//    public function messages(): array
-//    {
-//        return [
-//            'phone.required' => 'شماره موبایل را وارد کنید.',
-//            'phone.regex' => 'شماره موبایل معتبر نیست.',
-//            'password.required' => 'رمز عبور را وارد کنید.',
-//        ];
-//    }
 }

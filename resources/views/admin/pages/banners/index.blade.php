@@ -1,6 +1,4 @@
-@php
-    use App\Constants\AdminView;
-@endphp
+@use('App\Constants\AdminView')
 
 @extends('admin.layouts.app')
 
@@ -29,11 +27,11 @@
     <x-admin.breadcrumb
         :items="[
             [
-                'title' => 'بنرها',
-                'url' => route(AdminView::PERFIX_ROUTE . 'banner.index'),
+                'title' => __('banner.title'),
+                'url' => route(AdminView::PREFIX_ROUTE . 'banner.index'),
             ],
         ]"
-        current="لیست بنرها"
+        :current="__('banner.list')"
     />
 
     <div class="row layout-top-spacing">
@@ -43,16 +41,16 @@
                 <table
                     id="list"
                     class="table table-hover"
-                    data-ajax-url="{{ route(AdminView::PERFIX_ROUTE . 'banner.data') }}"
+                    data-ajax-url="{{ route(AdminView::PREFIX_ROUTE . 'banner.data') }}"
                 >
                     <thead>
                     <tr>
-                        <th>عنوان</th>
-                        <th>عنوان فرعی</th>
-                        <th>موقعیت</th>
-                        <th>ترتیب نمایش</th>
-                        <th>وضعیت</th>
-                        <th>عملیات</th>
+                        <th>{{ __('banner.columns.title') }}</th>
+                        <th>{{ __('banner.columns.subtitle') }}</th>
+                        <th>{{ __('banner.columns.position') }}</th>
+                        <th>{{ __('banner.columns.sort_order') }}</th>
+                        <th>{{ __('banner.columns.status') }}</th>
+                        <th>{{ __('banner.columns.actions') }}</th>
                     </tr>
                     </thead>
                 </table>

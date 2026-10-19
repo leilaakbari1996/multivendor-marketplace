@@ -60,7 +60,7 @@ class PermissionController extends Controller
         );
 
         return redirect()
-            ->route(AdminView::PERFIX_ROUTE . 'permission.index')
+            ->route(AdminView::PREFIX_ROUTE . 'permission.index')
             ->with('success', 'دسترسی با موفقیت ایجاد شد.');
     }
 

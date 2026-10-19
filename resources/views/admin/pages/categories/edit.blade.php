@@ -1,6 +1,5 @@
-@php
-    use App\Constants\AdminView;
-@endphp
+@use('App\Constants\AdminView')
+@use('App\Enums\CategoryType')
 
 @extends('admin.layouts.app')
 
@@ -15,15 +14,15 @@
     <x-admin.breadcrumb
         :items="[
             [
-                'title' => 'دسته بندی ها',
+                'title' => __('category.title'),
                 'url' => route('panel.category.index'),
             ],
         ]"
-        current="ویرایش دسته بندی"
+        :current="__('category.edit')"
     />
 
     <form
-        action="{{ route(AdminView::PERFIX_ROUTE . 'category.update', $category) }}"
+        action="{{ route(AdminView::PREFIX_ROUTE . 'category.update', $category) }}"
         method="POST"
         enctype="multipart/form-data"
     >
@@ -42,7 +41,7 @@
                             <x-admin.forms.input
                                 name="name"
                                 id="category-name"
-                                placeholder="عنوان"
+                                :placeholder="__('category.fields.name')"
                                 value="{{ old('name', $category->name) }}"
                             />
                         </div>
@@ -53,8 +52,8 @@
                             name="sort_order"
                             type="number"
                             id="sort_order"
-                            placeholder="ترتیب نمایش"
-                            label="ترتیب نمایش"
+                            :placeholder="__('category.fields.sort_order')"
+                            :label="__('category.fields.sort_order')"
                             value="{{ old('sort_order', $category->sort_order) }}"
                         />
                     </div>
@@ -62,7 +61,7 @@
                     <div class="row mb-4">
                         <x-admin.forms.textarea
                             name="description"
-                            label="توضیحات"
+                            :label="__('category.fields.description')"
                             :value="old('description', $category->description)"
                         />
                     </div>
@@ -72,7 +71,7 @@
                 {{-- SEO --}}
                 <div class="widget-content widget-content-area blog-create-section mt-4">
 
-                    <h5 class="mb-4">تنظیمات سئو</h5>
+                    <h5 class="mb-4">{{ __('category.seo_settings') }}</h5>
 
                     <div class="row mb-4">
 
@@ -80,7 +79,7 @@
                             <x-admin.forms.input
                                 name="meta_title"
                                 id="category-meta-title"
-                                placeholder="عنوان متا"
+                                :placeholder="__('category.fields.meta_title')"
                                 value="{{ old('meta_title', $category->meta_title) }}"
                             />
                         </div>
@@ -88,7 +87,7 @@
                         <div class="col-xxl-12">
                             <x-admin.forms.textarea
                                 name="meta_description"
-                                label="توضیحات متا"
+                                :label="__('category.fields.meta_description')"
                                 :value="old('meta_description', $category->meta_description)"
                             />
                         </div>
@@ -110,7 +109,7 @@
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.switch
                                 name="is_active"
-                                label="فعال"
+                                :label="__('common.active')"
                                 :checked="old('is_active', $category->is_active)"
                             />
                         </div>
@@ -118,7 +117,7 @@
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.switch
                                 name="is_main"
-                                label="دسته اصلی ؟ "
+                                :label="__('category.fields.is_main')"
                                 :checked="old('is_main', $category->is_main)"
                             />
                         </div>
@@ -130,7 +129,7 @@
                         <x-admin.forms.input
                             name="tags"
                             id="tags"
-                            label="تگ ها"
+                            :label="__('category.fields.tags')"
                             :defaultClass="false"
                             class="blog-tags"
                             value="{{ old('tags', $category->tags->pluck('name')->implode(',')) }}"
@@ -143,17 +142,17 @@
                             name="category"
                             :options="$categories->pluck('name', 'id')->toArray()"
                             :value="old('category')"
-                            placeholder="انتخاب دسته بندی والد"
+                            :placeholder="__('category.placeholders.parent')"
                             value="{{ old('category', $category->parent_id) }}"
                         />
                     </div>
                     <div class="col-xxl-12 col-md-12 mb-4">
                         <x-admin.forms.tom-select
                             name="type"
-                            :options="\App\Enums\CategoryType::options()"
+                            :options="CategoryType::options()"
                             value="{{ old('type', $category->type) }}"
-                            placeholder="نوع دسته‌بندی"
-                            :label="'نوع دسته‌بندی'"
+                            :placeholder="__('category.fields.type')"
+                            :label="__('category.fields.type')"
                         />
                     </div>
 
@@ -163,7 +162,7 @@
                         <x-admin.forms.file-upload
                             name="image"
                             id="category-image"
-                            label="تصویر دسته بندی"
+                            :label="__('category.fields.image')"
                             :multiple="false"
                             :allowReorder="false"
                             :maxFiles="1"
@@ -179,7 +178,7 @@
                             type="submit"
                             class="btn-success w-100"
                         >
-                            ویرایش دسته بندی
+                            {{ __('category.edit') }}
                         </x-admin.forms.button>
 
                     </div>

@@ -1,4 +1,15 @@
+@use('App\Constants\AdminView')
+@use('App\Support\AuthUser')
+
+@php
+    $user = AuthUser::user();
+@endphp
+
 <x-admin.table.actions
-    :edit-url="route('panel.post.edit', $row->id)"
-    :delete-url="route('panel.post.destroy', $row->id)"
+    :edit-url="$user?->can('update', $row)
+        ? route(AdminView::PREFIX_ROUTE . 'post.edit', $row->id)
+        : null"
+    :delete-url="$user?->can('delete', $row)
+        ? route(AdminView::PREFIX_ROUTE . 'post.destroy', $row->id)
+        : null"
 />

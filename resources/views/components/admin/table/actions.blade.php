@@ -10,7 +10,8 @@
         <a
             href="{{ $showUrl }}"
             class="btn btn-sm btn-light-info d-flex align-items-center justify-content-center"
-            title="مشاهده"
+            title="{{ __('common.view') }}"
+            aria-label="{{ __('common.view') }}"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
         >
@@ -35,7 +36,8 @@
         <a
             href="{{ $editUrl }}"
             class="btn btn-sm btn-light-primary d-flex align-items-center justify-content-center"
-            title="ویرایش"
+            title="{{ __('common.edit') }}"
+            aria-label="{{ __('common.edit') }}"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
         >
@@ -61,7 +63,8 @@
             type="button"
             class="btn btn-sm btn-light-danger d-flex align-items-center justify-content-center delete-item"
             data-url="{{ $deleteUrl }}"
-            title="حذف"
+            title="{{ __('common.delete') }}"
+            aria-label="{{ __('common.delete') }}"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
         >

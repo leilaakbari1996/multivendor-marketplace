@@ -1,25 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums;
 
 enum CategoryType: string
 {
     case Product = 'product';
-    case Faq     = 'faq';
-    // case Article = 'article';   // بعداً هر نوع دیگری که خواستید
+    case Faq = 'faq';
+    // case Article = 'article'; // add new types here, plus a key in lang/*/category.php
 
     public function label(): string
     {
-        return match ($this) {
-            self::Product => 'محصولات',
-            self::Faq     => 'سوالات متداول',
-        };
+        return __('category.types.'.$this->value);
     }
 
+    /**
+     * Options for select inputs: [value => translated label].
+     *
+     * @return array<string, string>
+     */
     public static function options(): array
     {
-        return collect(self::cases())
-            ->mapWithKeys(fn (self $t) => [$t->value => $t->label()])
-            ->all();
+        $options = [];
+
+        foreach (self::cases() as $case) {
+            $options[$case->value] = $case->label();
+        }
+
+        return $options;
     }
 }

@@ -1,27 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Admin\Faq\DeleteFaqAction;
 use App\Actions\Admin\Faq\StoreFaqAction;
 use App\Actions\Admin\Faq\UpdateFaqAction;
 use App\Constants\AdminView;
+use App\Datatables\Admin\FaqDatatable;
 use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Faq\StoreRequest;
-use App\Http\Requests\Admin\Faq\UpdateRequest;
+use App\Http\Requests\Admin\Faq\StoreFaqRequest;
+use App\Http\Requests\Admin\Faq\UpdateFaqRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Category;
 use App\Models\Faq;
-use App\Support\BadgeHelper;
-use App\Traits\HasDatatable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 class FaqController extends Controller
 {
-    use HasDatatable;
-
     public function __construct(
         private readonly StoreFaqAction $storeFaqAction,
         private readonly UpdateFaqAction $updateFaqAction,
@@ -30,107 +30,86 @@ class FaqController extends Controller
 
     public function index(): View
     {
-        $title = 'سوالات متداول';
+        $this->authorize('viewAny', Faq::class);
 
-        return view(
-            AdminView::FAQ_INDEX,
-            compact('title')
-        );
+        return view(AdminView::PREFIX . 'faqs.index', [
+            'title' => __('faq.title'),
+        ]);
     }
 
-    public function data()
+    public function data(
+        FaqDatatable $datatable
+    ): JsonResponse
     {
-        return $this->renderDatatable(
-            query: Faq::query()
-                ->select([
-                    'id',
-                    'question',
-                    'icon',
-                    'sort_order',
-                    'is_active',
-                ])
-                ->with('categories:id,name'),
-            actionsView: 'admin.pages.faqs.partials._actions',
-            extraColumns: [
-                'categories' => fn ($row) => e(
-                    $row->categories->pluck('name')->implode('، ') ?: '-'
-                ),
-                'is_active' => fn ($row) => BadgeHelper::booleanButton(
-                    value: (bool) $row->is_active,
-                    trueLabel: 'فعال',
-                    falseLabel: 'غیرفعال',
-                ),
-            ],
-        );
+        $this->authorize('viewAny', Faq::class);
+
+        return $datatable->toJson();
     }
 
     public function create(): View
     {
-        $title = 'ایجاد سوال متداول';
+        $this->authorize('create', Faq::class);
 
-        $categories = $this->faqCategories();
-
-        return view(
-            AdminView::FAQ_CREATE,
-            compact('title', 'categories')
-        );
+        return view(AdminView::PREFIX . 'faqs.create', [
+            'title' => __('faq.create'),
+            'categories' => $this->faqCategories(),
+        ]);
     }
 
     public function store(
-        StoreRequest $request
-    ): RedirectResponse {
-        $this->storeFaqAction->execute(
-            $request->validated()
-        );
+        StoreFaqRequest $request
+    ): RedirectResponse
+    {
+        $this->authorize('create', Faq::class);
 
-        return redirect()
-            ->route(AdminView::PERFIX_ROUTE . 'faq.index')
-            ->with('success', 'سوال متداول با موفقیت ایجاد شد.');
+        $this->storeFaqAction->execute($request->validated());
+
+        return to_route(AdminView::PREFIX_ROUTE . 'faq.index')
+            ->with('success', __('faq.created'));
     }
 
     public function edit(Faq $faq): View
     {
-        $title = 'ویرایش سوال متداول';
+        $this->authorize('update', $faq);
 
-        $categories = $this->faqCategories();
-
-        $selectedCategories = $faq->categories()
-            ->pluck('categories.id')
-            ->all();
-
-        return view(
-            AdminView::FAQ_EDIT,
-            compact('title', 'faq', 'categories', 'selectedCategories')
-        );
+        return view(AdminView::PREFIX . 'faqs.edit', [
+            'title' => __('faq.edit'),
+            'faq' => $faq,
+            'categories' => $this->faqCategories(),
+            'selectedCategories' => $faq->categories()
+                ->pluck('categories.id')
+                ->all(),
+        ]);
     }
 
     public function update(
-        UpdateRequest $request,
-        Faq $faq
+        UpdateFaqRequest $request,
+        Faq $faq,
     ): RedirectResponse {
+        $this->authorize('update', $faq);
+
         $this->updateFaqAction->execute(
             faq: $faq,
-            data: $request->validated()
+            data: $request->validated(),
         );
 
-        return redirect()
-            ->route(AdminView::PERFIX_ROUTE . 'faq.index')
-            ->with('success', 'سوال متداول با موفقیت بروزرسانی شد.');
+        return to_route(AdminView::PREFIX_ROUTE . 'faq.index')
+            ->with('success', __('faq.updated'));
     }
 
     public function destroy(Faq $faq): JsonResponse
     {
+        $this->authorize('delete', $faq);
+
         $this->deleteFaqAction->execute($faq);
 
-        return response()->json([
-            'message' => 'سوال متداول با موفقیت حذف شد.',
-        ]);
+        return ApiResponse::success(__('faq.deleted'));
     }
 
     /**
-     * دسته‌های فعال از نوع «سوالات متداول» برای فرم‌ها
+     * @return \Illuminate\Database\Eloquent\Collection<int, Category>
      */
-    private function faqCategories()
+    private function faqCategories(): \Illuminate\Database\Eloquent\Collection
     {
         return Category::query()
             ->active()

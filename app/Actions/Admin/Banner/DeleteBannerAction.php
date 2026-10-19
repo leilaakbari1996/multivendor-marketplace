@@ -1,18 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Admin\Banner;
 
 use App\Models\Banner;
-use Illuminate\Support\Facades\DB;
 
-class DeleteBannerAction
+final class DeleteBannerAction
 {
-    public function execute(Banner $banner): bool
+    public function execute(Banner $banner): void
     {
-        return DB::transaction(function () use ($banner) {
-            $banner->media()->delete();
-
-            return (bool) $banner->delete();
-        });
+        // Soft delete: the record and its media are kept, so restore() works.
+        $banner->delete();
     }
 }

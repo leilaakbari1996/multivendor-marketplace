@@ -1,7 +1,6 @@
-@php
-    use App\Constants\AdminView;
-    use App\Enums\BannerPosition;
-@endphp
+@use('App\Constants\AdminView')
+@use('App\Enums\BannerPosition')
+@use('App\Enums\MediaCollection')
 
 @extends('admin.layouts.app')
 
@@ -26,15 +25,15 @@
     <x-admin.breadcrumb
         :items="[
             [
-                'title' => 'بنرها',
-                'url' => route(AdminView::PERFIX_ROUTE . 'banner.index'),
+                'title' => __('banner.title'),
+                'url' => route(AdminView::PREFIX_ROUTE . 'banner.index'),
             ],
         ]"
-        current="ویرایش بنر"
+        :current="__('banner.edit')"
     />
 
     <form
-        action="{{ route(AdminView::PERFIX_ROUTE . 'banner.update', $banner) }}"
+        action="{{ route(AdminView::PREFIX_ROUTE . 'banner.update', $banner) }}"
         method="post"
         enctype="multipart/form-data"
     >
@@ -53,8 +52,8 @@
                             <x-admin.forms.input
                                 name="title"
                                 id="title"
-                                label="عنوان"
-                                placeholder="عنوان بنر"
+                                :label="__('banner.fields.title')"
+                                :placeholder="__('banner.placeholders.title')"
                                 :value="old('title', $banner->title)"
                             />
                         </div>
@@ -65,8 +64,8 @@
                             <x-admin.forms.input
                                 name="subtitle"
                                 id="subtitle"
-                                label="عنوان فرعی"
-                                placeholder="عنوان فرعی"
+                                :label="__('banner.fields.subtitle')"
+                                :placeholder="__('banner.placeholders.subtitle')"
                                 :value="old('subtitle', $banner->subtitle)"
                             />
                         </div>
@@ -76,8 +75,8 @@
                         <div class="col-sm-12">
                             <x-admin.forms.textarea
                                 name="description"
-                                label="توضیحات"
-                                placeholder="توضیحات بنر"
+                                :label="__('banner.fields.description')"
+                                :placeholder="__('banner.placeholders.description')"
                                 :value="old('description', $banner->description)"
                             />
                         </div>
@@ -97,8 +96,8 @@
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.switch
                                 name="is_active"
-                                label="فعال"
-                                :checked="old('is_active', $banner->is_active)"
+                                :label="__('common.active')"
+                                :checked="(bool) old('is_active', $banner->is_active)"
                             />
                         </div>
 
@@ -106,7 +105,7 @@
                             <x-admin.forms.input
                                 name="url"
                                 id="url"
-                                label="آدرس"
+                                :label="__('banner.fields.url')"
                                 placeholder="https://example.com"
                                 :value="old('url', $banner->url)"
                             />
@@ -115,13 +114,9 @@
                         <div class="col-xxl-12 mb-4">
                             <x-admin.forms.tom-select
                                 name="position"
-                                :options="collect(BannerPosition::cases())
-                                    ->mapWithKeys(fn ($position) => [
-                                        $position->value => $position->label()
-                                    ])
-                                    ->toArray()"
+                                :options="BannerPosition::options()"
                                 :value="old('position', $banner->position?->value)"
-                                placeholder="انتخاب موقعیت بنر"
+                                :placeholder="__('banner.placeholders.position')"
                             />
                         </div>
 
@@ -130,34 +125,19 @@
                                 name="sort_order"
                                 type="number"
                                 id="sort_order"
-                                label="ترتیب نمایش"
-                                placeholder="ترتیب نمایش"
+                                :label="__('banner.fields.sort_order')"
+                                :placeholder="__('banner.fields.sort_order')"
                                 :value="old('sort_order', $banner->sort_order)"
                             />
                         </div>
 
                         <div class="col-xxl-12 mb-4">
-
-                            @php
-                                $image = $banner->media
-                                    ->where('collection', \App\Enums\MediaCollection::IMAGE)
-                                    ->first();
-
-                                $imageUrl = $image
-                                    ? app(\App\Services\LocalFileUploader::class)->url(
-                                        path: $image->file_path,
-                                        disk: $image->disk,
-                                    )
-                                    : null;
-                            @endphp
-
                             <x-admin.forms.file-upload
                                 name="image"
                                 id="banner-image"
-                                label="تصویر بنر"
-                                :existingFile="$imageUrl"
+                                :label="__('banner.fields.image')"
+                                :existingFile="$banner->getFirstMediaUrl(MediaCollection::IMAGE) ?: null"
                             />
-
                         </div>
 
                         <div class="col-xxl-12 col-sm-4 col-12 mx-auto">
@@ -165,7 +145,7 @@
                                 type="submit"
                                 class="btn-success w-100"
                             >
-                                بروزرسانی بنر
+                                {{ __('banner.update') }}
                             </x-admin.forms.button>
                         </div>
 
